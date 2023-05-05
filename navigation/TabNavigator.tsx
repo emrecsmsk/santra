@@ -60,7 +60,7 @@ const TabNavigator: FC = () => {
                     tabBarShowLabel: false,
                     tabBarIcon: ({ size, focused }) => {
                         return <Ionicons
-                            name={focused ? "chatbox" : "chatbox-outline"}
+                            name={focused ? "mail" : "mail-outline"}
                             color="black"
                             size={size} />
                     }
