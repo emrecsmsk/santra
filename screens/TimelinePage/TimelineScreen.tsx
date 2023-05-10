@@ -34,7 +34,7 @@ const TimelineScreen: FC = () => {
     <FlatList
       data={data}
       renderItem={({ item }) => <Post name={item.name} userName={item.userName} profilePhoto={item.profilePhoto} postPhoto={item.postPhoto} description={item.description} isLiked={item.isLiked} isSaved={item.isSaved} likeCount={item.likeCount} commentCount={item.commentCount} />}
-/>
+    />
 
 
   )
