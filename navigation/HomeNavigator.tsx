@@ -19,7 +19,6 @@ const HomeNavigator: FC = () => {
                         <TouchableOpacity onPress={() => console.log()}>
                             <Ionicons style={{paddingRight: 15}} name="notifications-outline" size={24} color="black" />
                         </TouchableOpacity>
-
                     ),
                 }} />
         </Stack.Navigator >
