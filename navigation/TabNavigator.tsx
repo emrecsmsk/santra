@@ -12,7 +12,7 @@ import LoginScreen from "../screens/LoginPage/LoginScreen";
 import { useDispatch, useSelector } from "react-redux";
 import LoginReducer from "../redux/reducers/LoginReducer";
 import { ApplicationState } from "../redux/ReduxStore";
-import { signInWithEmailAndPassword } from "firebase/auth";
+import { signInWithEmailAndPassword, signInWithCustomToken } from "firebase/auth";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
 
@@ -23,6 +23,7 @@ const TabNavigator: FC = () => {
     const Tab = createBottomTabNavigator();
     var email = ""
     var password = ""
+
     useEffect(() => {
         login()
     }, [])
@@ -38,10 +39,10 @@ const TabNavigator: FC = () => {
             .catch((error) => {
                 const errorCode = error.code;
                 const errorMessage = error.message;
-                console.log(error.message + "3")
+                console.log(errorCode)
+                console.log(errorMessage)
             });
     }
-
     const getLoginItem = async () => {
         email = await AsyncStorage.getItem('email') ?? ""
         password = await AsyncStorage.getItem('password') ?? ""

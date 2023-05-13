@@ -2,7 +2,8 @@ const colors = {
     white : "white",
     black : "black",
     grey : "grey",
-    red: "red"
+    lightGrey : "lightgrey",
+    red: "red",
 } 
 
 export default colors

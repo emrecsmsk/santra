@@ -32,7 +32,7 @@ const LoginScreen = () => {
 
     const handleLogin = () => {
         signInWithEmailAndPassword(auth, email, password)
-            .then(async (userCredential) => {
+            .then(async () => {
                 // Signed in 
                 await saveUser()
                 dispatch(LoginReducer.setIsLoggedIn(true))
