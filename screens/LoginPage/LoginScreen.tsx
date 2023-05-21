@@ -13,6 +13,7 @@ import NavigationConstants from '../../navigation/NavigationConstants';
 const LoginScreen: FC = () => {
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
+
     const [mailError, setMailError] = useState(false)
     const [passwordError, setPasswordError] = useState(false)
     const [toManyRequestError, setToManyRequestError] = useState(false)

@@ -11,6 +11,7 @@ export default {
     timeline: "Timeline",
     messagesNavigator: "MessagesNavigator",
     messages: "Messages",
+    messaging: "Messaging",
     profileNavigator: "ProfileNavigator",
     profile: "Profile"
 }
