@@ -56,7 +56,7 @@ const SignUpScreen: FC = () => {
             setMailEmptyError(false)
             validateEmail()
 
-            const q = query(collection(db, "Profile"), where('mail', "==", email))
+            const q = query(collection(db, "users"), where('email', "==", email))
             const querySnapshot = await getDocs(q);
 
             if (querySnapshot.empty) {
@@ -87,7 +87,7 @@ const SignUpScreen: FC = () => {
             setUserNameEmptyError(true)
         } else {
             setUserNameEmptyError(false)
-            const q = query(collection(db, "Profile"), where('userName', "==", userName))
+            const q = query(collection(db, "users"), where('userName', "==", userName))
             const querySnapshot = await getDocs(q);
 
             if (querySnapshot.empty) {
@@ -204,25 +204,25 @@ const styles = StyleSheet.create({
         marginTop: 40,
     },
     button: {
-        backgroundColor: '#0782F9',
+        backgroundColor: colors.azure,
         width: '100%',
         padding: 15,
         borderRadius: 10,
         alignItems: 'center',
     },
     buttonOutline: {
-        backgroundColor: 'white',
+        backgroundColor: colors.white,
         marginTop: 5,
-        borderColor: '#0782F9',
+        borderColor: colors.azure,
         borderWidth: 2,
     },
     buttonText: {
-        color: 'white',
+        color: colors.white,
         fontWeight: '700',
         fontSize: 16,
     },
     buttonOutlineText: {
-        color: '#0782F9',
+        color: colors.azure,
         fontWeight: '700',
         fontSize: 16,
     },

@@ -138,13 +138,13 @@ const styles = StyleSheet.create({
         alignItems: 'center',
     },
     buttonOutline: {
-        backgroundColor: 'white',
+        backgroundColor: colors.white,
         marginTop: 5,
         borderColor: colors.azure,
         borderWidth: 2,
     },
     buttonText: {
-        color: 'white',
+        color: colors.white,
         fontWeight: '700',
         fontSize: 16,
     },
