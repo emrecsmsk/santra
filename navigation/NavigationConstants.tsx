@@ -1,4 +1,8 @@
 export default {
+    loginNavigator: "LoginNavigator",
+    login: "Login",
+    signUp: "SignUp",
+    signUpNext: "SignUpNext",
     homeNavigator: "HomeNavigator",
     home: "Home",
     searchNavigator: "SearchNavigator",

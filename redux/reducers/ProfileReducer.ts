@@ -26,7 +26,7 @@ const { setProfile, } = slice.actions
 
 const getProfile = () => async (dispatch: any) => {
     const email = await AsyncStorage.getItem('email') ?? ""
-    const docRef = doc(db, "Profile", email);
+    const docRef = doc(db, "users", email);
     const docSnap = await getDoc(docRef);
     if (docSnap.exists()) {
         const profileModel = docSnap.data();
