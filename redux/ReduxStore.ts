@@ -5,7 +5,7 @@ import ProfileReducer from "./reducers/ProfileReducer";
 
 const reducer = combineReducers({
     loginReducer: LoginReducer.reducer,
-    profileReducer: ProfileReducer.reducer
+    profileReducer: ProfileReducer.reducer,
 
 })
 

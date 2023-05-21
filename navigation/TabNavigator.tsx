@@ -8,12 +8,12 @@ import TimelineNavigator from "./TimelineNavigator";
 import SearchNavigator from "./SearchNavigator";
 import MessageNavigator from "./MessageNavigator";
 import ProfileNavigator from "./ProfileNavigator";
-import LoginScreen from "../screens/LoginPage/LoginScreen";
 import { useDispatch, useSelector } from "react-redux";
 import LoginReducer from "../redux/reducers/LoginReducer";
 import { ApplicationState } from "../redux/ReduxStore";
-import { signInWithEmailAndPassword, signInWithCustomToken } from "firebase/auth";
+import { signInWithEmailAndPassword } from "firebase/auth";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import LoginNavigator from "./LoginNavigator";
 
 
 const TabNavigator: FC = () => {
@@ -116,7 +116,8 @@ const TabNavigator: FC = () => {
                         }} />
                 </Tab.Navigator >
                 :
-                <LoginScreen />
+                <LoginNavigator />
+
             }
         </>
     )
