@@ -38,7 +38,7 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         alignItems: 'center',
         justifyContent: 'center',
-        width: Dimensions.get('window').width,
+        width: Dimensions.get('window').width-20,
         marginBottom: 10,
     },
     teamImage: {
@@ -57,12 +57,12 @@ const styles = StyleSheet.create({
     firstTeamText: {
         paddingLeft: 3,
         paddingRight: 10,
-        width: ((Dimensions.get('window').width) / 2) - 86
+        width: ((Dimensions.get('window').width - 20) / 2) - 86
     },
     secondTeamText: {
         paddingRight: 3,
         paddingLeft: 10,
-        width: ((Dimensions.get('window').width) / 2) - 86,
+        width: ((Dimensions.get('window').width - 20) / 2) - 86,
     }
 })
 

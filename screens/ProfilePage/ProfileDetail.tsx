@@ -1,65 +1,142 @@
 import { View, Text, StyleSheet, Image } from 'react-native'
-import React, { FC } from 'react'
-import { Divider } from 'react-native-paper'
+import React, { FC, useEffect, useState } from 'react'
+import { Button, Card, Divider } from 'react-native-paper'
 import colors from '../../utilies/colors'
 import MatchLine from '../../components/MatchLine'
+import NavigationConstants from '../../navigation/NavigationConstants'
+import { useNavigation } from '@react-navigation/native'
+import { collection, getDocs, limit, query, where } from 'firebase/firestore'
+import { db } from '../../firebase'
+import { TeamModel } from '../../models/TeamModel'
+import { FlatList } from 'react-native-gesture-handler'
 
-const ProfileDetail: FC = () => {
+interface ProfileDetailProps {
+    teams: string[],
+    birth: string,
+    height: string,
+    preferredFoot: string,
+    position: string,
+    shirtNumber: string,
+}
+
+const ProfileDetail: FC<ProfileDetailProps> = ({ teams, birth, height, preferredFoot, position, shirtNumber }) => {
+
+    const [age, setAge] = useState('')
+    const navigation = useNavigation<any>()
+    var teamsTemp: TeamModel[]
+    const [teamsState, setTeamsState] = useState<TeamModel[]>()
+    const id = 'tCb0bU5Iz0kFahwqORAt'
+
+    useEffect(() => {
+        fetchTeams()
+        const calculateYearDifference = (birth: string) => {
+            const currentDate = new Date()
+            const currentYear = currentDate.getFullYear()
+
+            const dateParts = birth.split('/')
+            const year = parseInt(dateParts[2], 10)
+            const age = currentYear - year
+            setAge(age.toString())
+        }
+        calculateYearDifference(birth);
+    }, [])
+
+
+    const fetchTeams = async () => {
+        const q = query(collection(db, "teams"),
+            where('teamId', "in", teams))
+        const querySnapshot = await getDocs(q);
+        querySnapshot.forEach((doc) => {
+            teamsTemp == undefined ?
+                teamsTemp = [doc.data() as TeamModel]
+                :
+                teamsTemp = [...teamsTemp, doc.data() as TeamModel]
+        })
+        setTeamsState(teamsTemp)
+    }
+
+
     return (
         <View>
-            <View style={styles.viewRow}>
-                <Image style={styles.teamImage} resizeMode='contain' source={{ uri: 'https://upload.wikimedia.org/wikipedia/commons/thumb/f/f6/Galatasaray_Sports_Club_Logo.png/961px-Galatasaray_Sports_Club_Logo.png' }} />
-                <Text style={styles.teamText}>Galatasaray</Text>
-            </View>
-            <Divider style={styles.divider} />
-            <View style={styles.descriptionViewTop} >
-                <View style={styles.descriptionDetailView} >
-                    <Text style={styles.descriptionDetailText}>22 YAŞ</Text>
-                    <Text style={styles.descriptionText}>11.11.2000</Text>
+            <Button onPress={() => navigation.push(NavigationConstants.profile, { id })} children={undefined}></Button>
+            <Card style={styles.cardView}>
+                <View style={styles.titleView}>
+                    <Text style={styles.titleText}>Takımlar</Text>
+                    <Divider style={{ width: 30, height: 1 }} />
                 </View>
-                <View style={styles.descriptionDetailView}>
-                    <Text style={styles.descriptionDetailText}>180 cm</Text>
-                    <Text style={styles.descriptionText}>Boy</Text>
+                <FlatList
+                    data={teamsState}
+                    renderItem={
+                        (item) =>
+                            <View style={styles.viewRow}>
+                                <Image style={styles.teamImage} resizeMode='contain' source={{ uri: item.item.teamPhoto }} />
+                                <Text style={styles.teamText}>{item.item.name}</Text>
+                            </View>}>
+                </FlatList>
+            </Card>
+            <Card style={styles.cardView}>
+                <View style={styles.titleView}>
+                    <Text style={styles.titleView}>Oyuncu bilgileri</Text>
+                    <Divider style={{ width: 30, height: 1 }} />
                 </View>
-            </View>
-            <View style={styles.descriptionViewBottom} >
-                <View style={styles.descriptionDetailView}>
-                    <Text style={styles.descriptionDetailText}>Sağ</Text>
-                    <Text style={styles.descriptionText}>Tercih Edilen Ayak</Text>
+                <View style={styles.descriptionViewTop} >
+                    <View style={styles.descriptionDetailView} >
+                        <Text style={styles.descriptionDetailText}>{age} YAŞ</Text>
+                        <Text style={styles.descriptionText}>{birth}</Text>
+                    </View>
+                    <View style={styles.descriptionDetailView}>
+                        <Text style={styles.descriptionDetailText}>{height} cm</Text>
+                        <Text style={styles.descriptionText}>Boy</Text>
+                    </View>
                 </View>
-                <View style={styles.descriptionDetailView}>
-                    <Text style={styles.descriptionDetailText}>DF</Text>
-                    <Text style={styles.descriptionText}>Pozisyon</Text>
+                <View style={styles.descriptionViewBottom} >
+                    <View style={styles.descriptionDetailView}>
+                        <Text style={styles.descriptionDetailText}>{preferredFoot}</Text>
+                        <Text style={styles.descriptionText}>Tercih Edilen Ayak</Text>
+                    </View>
+                    <View style={styles.descriptionDetailView}>
+                        <Text style={styles.descriptionDetailText}>{position}</Text>
+                        <Text style={styles.descriptionText}>Pozisyon</Text>
+                    </View>
+                    <View style={styles.descriptionDetailView} >
+                        <Text style={styles.descriptionDetailText}>{shirtNumber}</Text>
+                        <Text style={styles.descriptionText}>Forma Numarası</Text>
+                    </View>
                 </View>
-                <View style={styles.descriptionDetailView} >
-                    <Text style={styles.descriptionDetailText}>99</Text>
-                    <Text style={styles.descriptionText}>Forma Numarası</Text>
+            </Card>
+            <Card style={[{ paddingHorizontal: 0 },styles.cardView]}>
+                <View style={ styles.titleView}>
+                    <Text style={styles.titleText}>Maç geçmişi</Text>
+                    <Divider style={{ width: 30, height: 1 }} />
                 </View>
-            </View>
-            <Divider style={styles.divider} />
-            <View style={styles.matchHistoryTextView}>
-                <Text style={styles.historyText}>Maç geçmişi</Text>
-                <Divider style={{ width: 30, height: 1 }} />
-            </View>
-            <MatchLine firstTeam={'Galatasaray'} secondTeam={'Fenerbahçe'} firstTeamPhoto={'https://upload.wikimedia.org/wikipedia/commons/thumb/f/f6/Galatasaray_Sports_Club_Logo.png/961px-Galatasaray_Sports_Club_Logo.png'} secondTeamPhoto={'https://upload.wikimedia.org/wikipedia/tr/8/86/Fenerbahçe_SK.png'} time={'19.00'} date={'04.06.2023'} isMatchFinished={true} score={''} />
-            <MatchLine firstTeam={'Galatasaray'} secondTeam={'Fenerbahçe'} firstTeamPhoto={'https://upload.wikimedia.org/wikipedia/commons/thumb/f/f6/Galatasaray_Sports_Club_Logo.png/961px-Galatasaray_Sports_Club_Logo.png'} secondTeamPhoto={'https://upload.wikimedia.org/wikipedia/tr/8/86/Fenerbahçe_SK.png'} time={'19.00'} date={'04.06.2023'} isMatchFinished={false} score={'2-1'} />
-            <MatchLine firstTeam={'Galatasaray'} secondTeam={'Fenerbahçe'} firstTeamPhoto={'https://upload.wikimedia.org/wikipedia/commons/thumb/f/f6/Galatasaray_Sports_Club_Logo.png/961px-Galatasaray_Sports_Club_Logo.png'} secondTeamPhoto={'https://upload.wikimedia.org/wikipedia/tr/8/86/Fenerbahçe_SK.png'} time={'19.00'} date={'04.06.2023'} isMatchFinished={false} score={'2-1'} />
-            <MatchLine firstTeam={'Galatasaray'} secondTeam={'Fenerbahçe'} firstTeamPhoto={'https://upload.wikimedia.org/wikipedia/commons/thumb/f/f6/Galatasaray_Sports_Club_Logo.png/961px-Galatasaray_Sports_Club_Logo.png'} secondTeamPhoto={'https://upload.wikimedia.org/wikipedia/tr/8/86/Fenerbahçe_SK.png'} time={'19.00'} date={'04.06.2023'} isMatchFinished={false} score={'2-1'} />
-            <MatchLine firstTeam={'Galatasaray'} secondTeam={'Fenerbahçe'} firstTeamPhoto={'https://upload.wikimedia.org/wikipedia/commons/thumb/f/f6/Galatasaray_Sports_Club_Logo.png/961px-Galatasaray_Sports_Club_Logo.png'} secondTeamPhoto={'https://upload.wikimedia.org/wikipedia/tr/8/86/Fenerbahçe_SK.png'} time={'19.00'} date={'04.06.2023'} isMatchFinished={false} score={'2-1'} />
-            <MatchLine firstTeam={'Galatasaray'} secondTeam={'Fenerbahçe'} firstTeamPhoto={'https://upload.wikimedia.org/wikipedia/commons/thumb/f/f6/Galatasaray_Sports_Club_Logo.png/961px-Galatasaray_Sports_Club_Logo.png'} secondTeamPhoto={'https://upload.wikimedia.org/wikipedia/tr/8/86/Fenerbahçe_SK.png'} time={'19.00'} date={'04.06.2023'} isMatchFinished={false} score={'2-1'} />
-            <MatchLine firstTeam={'Galatasaray'} secondTeam={'Fenerbahçe'} firstTeamPhoto={'https://upload.wikimedia.org/wikipedia/commons/thumb/f/f6/Galatasaray_Sports_Club_Logo.png/961px-Galatasaray_Sports_Club_Logo.png'} secondTeamPhoto={'https://upload.wikimedia.org/wikipedia/tr/8/86/Fenerbahçe_SK.png'} time={'19.00'} date={'04.06.2023'} isMatchFinished={false} score={'2-1'} />
-            <MatchLine firstTeam={'Galatasaray'} secondTeam={'Fenerbahçe'} firstTeamPhoto={'https://upload.wikimedia.org/wikipedia/commons/thumb/f/f6/Galatasaray_Sports_Club_Logo.png/961px-Galatasaray_Sports_Club_Logo.png'} secondTeamPhoto={'https://upload.wikimedia.org/wikipedia/tr/8/86/Fenerbahçe_SK.png'} time={'19.00'} date={'04.06.2023'} isMatchFinished={false} score={'2-1'} />
-            <MatchLine firstTeam={'Galatasaray'} secondTeam={'Fenerbahçe'} firstTeamPhoto={'https://upload.wikimedia.org/wikipedia/commons/thumb/f/f6/Galatasaray_Sports_Club_Logo.png/961px-Galatasaray_Sports_Club_Logo.png'} secondTeamPhoto={'https://upload.wikimedia.org/wikipedia/tr/8/86/Fenerbahçe_SK.png'} time={'19.00'} date={'04.06.2023'} isMatchFinished={false} score={'2-1'} />
-        </View>
+                <MatchLine firstTeam={'Galatasaray'} secondTeam={'Fenerbahçe'} firstTeamPhoto={'https://upload.wikimedia.org/wikipedia/commons/thumb/f/f6/Galatasaray_Sports_Club_Logo.png/961px-Galatasaray_Sports_Club_Logo.png'} secondTeamPhoto={'https://upload.wikimedia.org/wikipedia/tr/8/86/Fenerbahçe_SK.png'} time={'19.00'} date={'04.06.2023'} isMatchFinished={true} score={''} />
+                <MatchLine firstTeam={'Galatasaray'} secondTeam={'Fenerbahçe'} firstTeamPhoto={'https://upload.wikimedia.org/wikipedia/commons/thumb/f/f6/Galatasaray_Sports_Club_Logo.png/961px-Galatasaray_Sports_Club_Logo.png'} secondTeamPhoto={'https://upload.wikimedia.org/wikipedia/tr/8/86/Fenerbahçe_SK.png'} time={'19.00'} date={'04.06.2023'} isMatchFinished={false} score={'2-1'} />
+                <MatchLine firstTeam={'Galatasaray'} secondTeam={'Fenerbahçe'} firstTeamPhoto={'https://upload.wikimedia.org/wikipedia/commons/thumb/f/f6/Galatasaray_Sports_Club_Logo.png/961px-Galatasaray_Sports_Club_Logo.png'} secondTeamPhoto={'https://upload.wikimedia.org/wikipedia/tr/8/86/Fenerbahçe_SK.png'} time={'19.00'} date={'04.06.2023'} isMatchFinished={false} score={'2-1'} />
+                <MatchLine firstTeam={'Galatasaray'} secondTeam={'Fenerbahçe'} firstTeamPhoto={'https://upload.wikimedia.org/wikipedia/commons/thumb/f/f6/Galatasaray_Sports_Club_Logo.png/961px-Galatasaray_Sports_Club_Logo.png'} secondTeamPhoto={'https://upload.wikimedia.org/wikipedia/tr/8/86/Fenerbahçe_SK.png'} time={'19.00'} date={'04.06.2023'} isMatchFinished={false} score={'2-1'} />
+                <MatchLine firstTeam={'Galatasaray'} secondTeam={'Fenerbahçe'} firstTeamPhoto={'https://upload.wikimedia.org/wikipedia/commons/thumb/f/f6/Galatasaray_Sports_Club_Logo.png/961px-Galatasaray_Sports_Club_Logo.png'} secondTeamPhoto={'https://upload.wikimedia.org/wikipedia/tr/8/86/Fenerbahçe_SK.png'} time={'19.00'} date={'04.06.2023'} isMatchFinished={false} score={'2-1'} />
+                <MatchLine firstTeam={'Galatasaray'} secondTeam={'Fenerbahçe'} firstTeamPhoto={'https://upload.wikimedia.org/wikipedia/commons/thumb/f/f6/Galatasaray_Sports_Club_Logo.png/961px-Galatasaray_Sports_Club_Logo.png'} secondTeamPhoto={'https://upload.wikimedia.org/wikipedia/tr/8/86/Fenerbahçe_SK.png'} time={'19.00'} date={'04.06.2023'} isMatchFinished={false} score={'2-1'} />
+                <MatchLine firstTeam={'Galatasaray'} secondTeam={'Fenerbahçe'} firstTeamPhoto={'https://upload.wikimedia.org/wikipedia/commons/thumb/f/f6/Galatasaray_Sports_Club_Logo.png/961px-Galatasaray_Sports_Club_Logo.png'} secondTeamPhoto={'https://upload.wikimedia.org/wikipedia/tr/8/86/Fenerbahçe_SK.png'} time={'19.00'} date={'04.06.2023'} isMatchFinished={false} score={'2-1'} />
+                <MatchLine firstTeam={'Galatasaray'} secondTeam={'Fenerbahçe'} firstTeamPhoto={'https://upload.wikimedia.org/wikipedia/commons/thumb/f/f6/Galatasaray_Sports_Club_Logo.png/961px-Galatasaray_Sports_Club_Logo.png'} secondTeamPhoto={'https://upload.wikimedia.org/wikipedia/tr/8/86/Fenerbahçe_SK.png'} time={'19.00'} date={'04.06.2023'} isMatchFinished={false} score={'2-1'} />
+                <MatchLine firstTeam={'Galatasaray'} secondTeam={'Fenerbahçe'} firstTeamPhoto={'https://upload.wikimedia.org/wikipedia/commons/thumb/f/f6/Galatasaray_Sports_Club_Logo.png/961px-Galatasaray_Sports_Club_Logo.png'} secondTeamPhoto={'https://upload.wikimedia.org/wikipedia/tr/8/86/Fenerbahçe_SK.png'} time={'19.00'} date={'04.06.2023'} isMatchFinished={false} score={'2-1'} />
+            </Card>
+        </View >
+
     )
 }
 
 const styles = StyleSheet.create({
     viewRow: {
-        marginTop: 10,
+        marginTop: 5,
         flexDirection: 'row',
         marginLeft: 20,
         alignItems: 'center'
+    },
+    cardView: {
+        backgroundColor: colors.white,
+        marginTop: 10,
+        marginBottom: 5,
+        marginHorizontal: 10,
+        padding: 10
     },
     divider: {
         margin: 10,
@@ -92,11 +169,11 @@ const styles = StyleSheet.create({
         paddingLeft: 5,
         fontWeight: '400'
     },
-    matchHistoryTextView: {
+    titleView: {
         alignItems: 'center',
         paddingBottom: 10,
     },
-    historyText: {
+    titleText: {
         fontWeight: '600',
         paddingBottom: 5
     }

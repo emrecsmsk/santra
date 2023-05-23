@@ -10,4 +10,6 @@ export interface SignUpModel {
     followers?: string[]
     following?: string[]
     teams?: string[]
+    profilePhoto: string,
+    headerPhoto: string
 }

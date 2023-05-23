@@ -1,17 +1,20 @@
 import { BirthModel } from "./BirthModel";
 
 export interface ProfileModel {
-    teams: string[],
-    birth: BirthModel,
-    followers: string[],
-    following: string[],
-    height: number,
-    mail: string,
+    id: string,
+    birth: string,
+    height: string,
+    email: string,
     name: string,
-    number: number,
+    shirtNumber: string,
     position: string,
     preferredFoot: string,
-    userName: string
+    userName: string,
+    followers: string[]
+    following: string[]
+    teams: string[]
+    profilePhoto: string,
+    headerPhoto: string
 }
 
 

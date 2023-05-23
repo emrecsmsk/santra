@@ -1,6 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit"
 import { ProfileModel } from "../../models/ProfileModel"
-import { doc, getDoc } from "firebase/firestore"
+import { collection, doc, getDoc, getDocs, query, where } from "firebase/firestore"
 import { db } from "../../firebase"
 import AsyncStorage from "@react-native-async-storage/async-storage"
 
@@ -26,15 +26,14 @@ const { setProfile, } = slice.actions
 
 const getProfile = () => async (dispatch: any) => {
     const email = await AsyncStorage.getItem('email') ?? ""
-    const docRef = doc(db, "users", email);
-    const docSnap = await getDoc(docRef);
-    if (docSnap.exists()) {
+
+    const q = query(collection(db, "users"), where('email', "==", email))
+    const querySnapshot = await getDocs(q);
+    querySnapshot.forEach((docSnap) => {
         const profileModel = docSnap.data();
         dispatch(setProfile(profileModel))
-    } else {
-        // docSnap.data() will be undefined in this case
-        console.log("No such document!");
-    }
+    })
+
 
 }
 

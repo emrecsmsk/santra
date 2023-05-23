@@ -9,7 +9,8 @@ import colors from '../../utilies/colors'
 import { useNavigation, useRoute } from '@react-navigation/native'
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
 import { SignUpModel } from '../../models/SignUpModel';
-import { doc, setDoc } from 'firebase/firestore';
+import { addDoc, collection, doc, updateDoc } from 'firebase/firestore';
+import ProfileReducer from '../../redux/reducers/ProfileReducer';
 
 
 
@@ -73,8 +74,7 @@ const SignUpNextScreen: FC = () => {
 
     const formattedDate = (date: string) => {
 
-        let formattedDate = date.replace(/[^0-9]/g, ''); // Sayı olmayan karakterleri kaldırın
-
+        let formattedDate = date.replace(/[^0-9]/g, '')
         if (formattedDate.length > 2) {
             formattedDate = formattedDate.substring(0, 2) + '/' + formattedDate.substring(2)
         }
@@ -152,6 +152,9 @@ const SignUpNextScreen: FC = () => {
         createUserWithEmailAndPassword(auth, email, password)
             .then(async () => {
                 // Signed in 
+
+                dispatch(ProfileReducer.getProfile())
+
                 const docData: SignUpModel = {
                     birth: birthDay,
                     height: height,
@@ -163,11 +166,21 @@ const SignUpNextScreen: FC = () => {
                     userName: userName,
                     followers: [],
                     following: [],
-                    teams: []
+                    teams: [],
+                    profilePhoto: 'https://firebasestorage.googleapis.com/v0/b/santra-d7297.appspot.com/o/defaultPP.jpg?alt=media&token=266aec21-c3fd-4819-96a2-9e4771a54cf9',
+                    headerPhoto: 'https://firebasestorage.googleapis.com/v0/b/santra-d7297.appspot.com/o/defaultHeader.jpg?alt=media&token=cf3e4765-d1f9-4691-bbc4-e13866e86b2b'
                 }
 
-                await setDoc(doc(db, "users", email), docData)
+                const usersCollectionRef = collection(db, "users")
 
+                await addDoc(usersCollectionRef, docData).then(
+                    async (value) => {
+                        const docData = {
+                            id: value.id,
+                        }
+                        await updateDoc(doc(db, "users", value.id), docData);
+                    }
+                )
                 await saveUser()
                 dispatch(LoginReducer.setIsLoggedIn(true))
 

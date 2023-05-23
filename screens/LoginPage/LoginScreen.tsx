@@ -8,6 +8,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import colors from '../../utilies/colors';
 import { useNavigation } from '@react-navigation/native';
 import NavigationConstants from '../../navigation/NavigationConstants';
+import ProfileReducer from '../../redux/reducers/ProfileReducer';
 
 
 const LoginScreen: FC = () => {
@@ -27,6 +28,7 @@ const LoginScreen: FC = () => {
                 // Signed in 
                 await saveUser()
                 dispatch(LoginReducer.setIsLoggedIn(true))
+                dispatch(ProfileReducer.getProfile())
                 // ...
             })
             .catch((error) => {

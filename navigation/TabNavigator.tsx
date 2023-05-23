@@ -14,6 +14,7 @@ import { ApplicationState } from "../redux/ReduxStore";
 import { signInWithEmailAndPassword } from "firebase/auth";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import LoginNavigator from "./LoginNavigator";
+import ProfileReducer from "../redux/reducers/ProfileReducer";
 
 
 const TabNavigator: FC = () => {
@@ -31,9 +32,10 @@ const TabNavigator: FC = () => {
     const login = async () => {
         await getLoginItem()
         signInWithEmailAndPassword(auth, email, password)
-            .then(() => {
+            .then((user) => {
                 // Signed in 
                 dispatch(LoginReducer.setIsLoggedIn(true))
+                dispatch(ProfileReducer.getProfile())
                 // ...
             })
             .catch((error) => {

@@ -1,11 +1,11 @@
 import { createSlice } from "@reduxjs/toolkit"
 
 interface LoginState {
-    isLoggedIn: boolean,
+    isLoggedIn: boolean
 }
 
 const initialState: LoginState = {
-    isLoggedIn: false,
+    isLoggedIn: false
 }
 
 const slice = createSlice({
@@ -18,7 +18,7 @@ const slice = createSlice({
     }
 })
 
-const { loginAction, } = slice.actions
+const { loginAction } = slice.actions
 
 const setIsLoggedIn = (isLoggedIn: boolean) => (dispatch: any) => {
 
@@ -27,5 +27,5 @@ const setIsLoggedIn = (isLoggedIn: boolean) => (dispatch: any) => {
 
 export default {
     reducer: slice.reducer,
-    setIsLoggedIn
+    setIsLoggedIn,
 }
