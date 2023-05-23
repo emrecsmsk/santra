@@ -135,6 +135,7 @@ const ProfileHeader: FC<ProfileHeaderProps> = ({ id, name, userName, profilePhot
 const styles = StyleSheet.create({
     headerImage: {
         height: 150,
+        backgroundColor: colors.white
     },
     profileImageView: {
         height: 76,
@@ -143,12 +144,13 @@ const styles = StyleSheet.create({
         marginLeft: 20,
         position: 'absolute',
         backgroundColor: colors.white,
-        borderRadius: 38
+        borderRadius: 38,
     },
     profileImage: {
         marginTop: 118,
         marginLeft: 23,
-        position: 'absolute'
+        position: 'absolute',
+        backgroundColor: colors.white
     },
     name: {
         marginTop: 40,

@@ -11,7 +11,12 @@ const SearchNavigator: FC = () => {
 
     return (
         <Stack.Navigator initialRouteName={NavigationConstants.search}>
-            <Stack.Screen name={NavigationConstants.search} component={SearchScreen} />
+            <Stack.Screen 
+            name={NavigationConstants.search} 
+            component={SearchScreen} 
+            options={{
+                title:"Arama"
+            }} />
         </Stack.Navigator >
     )
 }

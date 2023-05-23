@@ -33,8 +33,6 @@ const getProfile = () => async (dispatch: any) => {
         const profileModel = docSnap.data();
         dispatch(setProfile(profileModel))
     })
-
-
 }
 
 export default {

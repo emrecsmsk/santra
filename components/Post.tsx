@@ -31,8 +31,6 @@ const Post: FC<PostProps> = ({ postId, userId, postPhoto, description, likes, is
     const [stateIsSaved, setStateIsSaved] = useState(isSaved)
     const [profileModelState, setProfileModelState] = useState<ProfileModel>()
 
-    const dispatch = useDispatch<any>()
-
 
     useEffect(() => {
         fetchUserDetail()
@@ -83,7 +81,7 @@ const Post: FC<PostProps> = ({ postId, userId, postPhoto, description, likes, is
                 <Card onPress={(_) => console.log('posta tıklandı')} elevation={1}>
                     <View style={styles.view}>
                         <View style={styles.viewRow}>
-                            <Avatar.Image size={45} source={{ uri: profileModelState?.profilePhoto }} />
+                            <Avatar.Image size={45} source={{ uri: profileModelState?.profilePhoto }} style={styles.avatar}/>
                             <View style={styles.viewColumn}>
                                 <View style={styles.viewRow}>
                                     <Text style={styles.name} numberOfLines={1}>{profileModelState.name}</Text>
@@ -174,6 +172,9 @@ const styles = StyleSheet.create({
         paddingLeft: 2,
         fontSize: 15,
         color: colors.red
+    },
+    avatar: {
+        backgroundColor: colors.white
     }
 })
 
