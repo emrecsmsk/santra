@@ -1,32 +1,69 @@
-import React, { useState } from 'react';
-import { View, StyleSheet } from 'react-native';
-import { GiftedChat, IMessage } from 'react-native-gifted-chat';
+import React, { useState, useEffect, FC } from 'react';
+import { GiftedChat, IMessage, User } from 'react-native-gifted-chat';
+import 'firebase/firestore';
+import firebase from 'firebase/compat/app';
+import 'firebase/compat/auth';
+import 'firebase/compat/firestore';
+import { collection, onSnapshot, addDoc, doc} from 'firebase/firestore';
+import { db } from '../../firebase';
 import { getBottomSpace } from 'react-native-iphone-x-helper';
 
-const MessagingPage: React.FC = () => {
+
+const MessagingPage = () => {
     const [messages, setMessages] = useState<IMessage[]>([]);
-    const onSend = (newMessages: IMessage[]) => {
-        setMessages((prevMessages) => GiftedChat.append(prevMessages, newMessages));
+    const chatsRef = collection(db, "chats");
+    const usersRef = collection(db, "users");
+
+    const reversedMessages = [...messages].reverse();
+
+    useEffect(() => {
+        const unsubscribe = onSnapshot(chatsRef, (snapshot) => {
+            const messageData: IMessage[] = [];
+            snapshot.docs.map((doc) => {
+                const message = doc.data();
+                if (message.createdAt) {
+                    messageData.push({
+                        _id: doc.id,
+                        text: message.text,
+                        createdAt: message.createdAt.toDate(),
+                        user: {
+                            _id: message.user._id,
+                            name: message.user.name,
+                        },
+                    })
+                }
+
+            });
+            setMessages(messageData);
+        });
+
+        return () => unsubscribe();
+    }, []);
+
+    const onSend = async (newMessages: IMessage[]) => {
+        const message = newMessages[0];
+        const { _id, text, createdAt, user } = message;
+
+        await addDoc(chatsRef, {
+            text,
+            createdAt: firebase.firestore.Timestamp.fromDate(new Date(createdAt)),
+            user,
+        })
     };
+
+    const user: User = {
+        _id: 'your_user_id',
+        name: 'Your Name',
+    };
+
     return (
-        <View style={styles.container}>
-            <GiftedChat
-                bottomOffset={getBottomSpace()}
-                messages={messages}
-                onSend={messages => onSend(messages)}
-                user={{
-                    _id: 1,
-                }}
-            />
-        </View>
+        <GiftedChat
+            bottomOffset={getBottomSpace()}
+            messages={reversedMessages}
+            onSend={(newMessages) => onSend(newMessages)}
+            user={user}
+        />
     );
 };
-const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        //paddingBottom: getBottomSpace(),
-        backgroundColor: '#F5FCFF',
-    },
-});
 
-export default MessagingPage
+export default MessagingPage;
