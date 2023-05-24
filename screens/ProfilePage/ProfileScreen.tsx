@@ -1,9 +1,9 @@
-import React, { FC, useCallback, useEffect, useState } from 'react'
+import React, { FC, useCallback, useEffect, useRef, useState } from 'react'
 import { Tabs } from 'react-native-collapsible-tab-view'
 import ProfileDetail from './ProfileDetail'
 import Post from '../../components/Post'
 import ProfileHeader from './ProfileHeader'
-import { RefreshControl, View } from 'react-native'
+import { RefreshControl, View, StyleSheet } from 'react-native'
 import { useSelector } from 'react-redux'
 import { ApplicationState } from '../../redux/ReduxStore'
 import { collection, getDocs, query, where, limit, QueryDocumentSnapshot, DocumentData, orderBy, startAfter } from 'firebase/firestore'
@@ -11,6 +11,7 @@ import { db } from '../../firebase'
 import { ProfileModel } from '../../models/ProfileModel'
 import { useRoute } from '@react-navigation/native'
 import { PostModel } from '../../models/PostModel'
+import LottieView from 'lottie-react-native'
 
 const ProfileScreen: FC = () => {
 
@@ -20,7 +21,9 @@ const ProfileScreen: FC = () => {
   const [postModelState, setPostModelState] = useState<PostModel[]>([])
   const route = useRoute<any>()
   const id: string = route.params && route.params.id
-  const [showEdit, setShowEdit] = useState(false)
+  const isSearched: boolean = route.params && route.params.id
+  const animation = useRef(null)
+  const [otherProfile, setOtherProfile] = useState(false)
   const [refreshing, setRefreshing] = useState(false)
   const [lastVisible, setLastVisible] = useState<QueryDocumentSnapshot<DocumentData>>()
 
@@ -28,12 +31,12 @@ const ProfileScreen: FC = () => {
     const fetchProfile = async () => {
 
       if (id === undefined) {
-        setShowEdit(true)
+        setOtherProfile(false)
         setProfileModelState(profileModel)
         fetchPosts(profileModel!.id).then(() => setPostModelState(posts))
 
       } else {
-        setShowEdit(false)
+        setOtherProfile(true)
         const q = query(collection(db, "users"), where('id', "==", id))
         const querySnapshot = await getDocs(q);
         querySnapshot.forEach((doc) => {
@@ -98,10 +101,19 @@ const ProfileScreen: FC = () => {
 
   return (
     <View style={{ flex: 1 }}>
-      {profileModelState &&
+      {profileModelState == undefined ?
+        <View style={styles.loadingView}>
+          <LottieView
+            autoPlay
+            ref={animation}
+            style={styles.lottieLoading}
+            source={require('../../assets/loading.json')}
+          />
+        </View>
+        :
         <Tabs.Container
           renderHeader={() => (
-            <ProfileHeader id={profileModelState.id} name={profileModelState.name} userName={profileModelState.userName} profilePhoto={profileModelState.profilePhoto} headerPhoto={profileModelState.headerPhoto} following={profileModelState.following} followers={profileModelState.followers} showEdit={showEdit} email={profileModelState.email} />
+            <ProfileHeader id={profileModelState.id} name={profileModelState.name} userName={profileModelState.userName} profilePhoto={profileModelState.profilePhoto} headerPhoto={profileModelState.headerPhoto} following={profileModelState.following} followers={profileModelState.followers} isSearched={isSearched} otherProfile={otherProfile} />
           )}
           minHeaderHeight={30}
         >
@@ -128,5 +140,17 @@ const ProfileScreen: FC = () => {
     </View >
   )
 }
+
+const styles = StyleSheet.create({
+  loadingView: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center'
+  },
+  lottieLoading: {
+    width: 200,
+    height: 200
+  },
+})
 
 export default ProfileScreen

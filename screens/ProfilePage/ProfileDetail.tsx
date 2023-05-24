@@ -8,7 +8,6 @@ import { useNavigation } from '@react-navigation/native'
 import { collection, getDocs, limit, query, where } from 'firebase/firestore'
 import { db } from '../../firebase'
 import { TeamModel } from '../../models/TeamModel'
-import { FlatList } from 'react-native-gesture-handler'
 
 interface ProfileDetailProps {
     teams: string[],
@@ -25,7 +24,6 @@ const ProfileDetail: FC<ProfileDetailProps> = ({ teams, birth, height, preferred
     const navigation = useNavigation<any>()
     var teamsTemp: TeamModel[]
     const [teamsState, setTeamsState] = useState<TeamModel[]>()
-    const id = 'tCb0bU5Iz0kFahwqORAt'
 
     useEffect(() => {
         fetchTeams()
@@ -58,21 +56,18 @@ const ProfileDetail: FC<ProfileDetailProps> = ({ teams, birth, height, preferred
 
     return (
         <View>
-            <Button onPress={() => navigation.push(NavigationConstants.profile, { id })} children={undefined}></Button>
             <Card style={styles.cardView}>
                 <View style={styles.titleView}>
                     <Text style={styles.titleText}>Takımlar</Text>
                     <Divider style={{ width: 30, height: 1 }} />
                 </View>
-                <FlatList
-                    data={teamsState}
-                    renderItem={
-                        (item) =>
-                            <View style={styles.viewRow}>
-                                <Image style={styles.teamImage} resizeMode='contain' source={{ uri: item.item.teamPhoto }} />
-                                <Text style={styles.teamText}>{item.item.name}</Text>
-                            </View>}>
-                </FlatList>
+                {
+                    teamsState?.map((item, index) => 
+                    <View key={index} style={styles.viewRow}>
+                        <Image style={styles.teamImage} resizeMode='contain' source={{ uri: item.teamPhoto }} />
+                        <Text style={styles.teamText}>{item.name}</Text>
+                    </View>)
+                }
             </Card>
             <Card style={styles.cardView}>
                 <View style={styles.titleView}>
@@ -104,8 +99,8 @@ const ProfileDetail: FC<ProfileDetailProps> = ({ teams, birth, height, preferred
                     </View>
                 </View>
             </Card>
-            <Card style={[{ paddingHorizontal: 0 },styles.cardView]}>
-                <View style={ styles.titleView}>
+            <Card style={[{ paddingHorizontal: 0 }, styles.cardView]}>
+                <View style={styles.titleView}>
                     <Text style={styles.titleText}>Maç geçmişi</Text>
                     <Divider style={{ width: 30, height: 1 }} />
                 </View>

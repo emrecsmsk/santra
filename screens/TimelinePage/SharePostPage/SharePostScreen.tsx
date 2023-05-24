@@ -59,7 +59,6 @@ const SharePostScreen = () => {
 
 
     const onPressShare = async () => {
-        //setSaved(true)
         const docData = {
             createdAt: new Date(),
             userId: profileModel?.id,

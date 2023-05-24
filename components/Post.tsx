@@ -2,13 +2,13 @@ import { StyleSheet, Text, View, Image, TouchableOpacity } from 'react-native'
 import React, { FC, useEffect, useState } from 'react'
 import { Avatar, Card } from 'react-native-paper'
 import colors from '../utilies/colors'
-import { Dimensions } from 'react-native';
-import { Ionicons } from '@expo/vector-icons';
-import { useDispatch, useSelector } from 'react-redux';
-import { ApplicationState } from '../redux/ReduxStore';
-import { FieldValue, arrayRemove, arrayUnion, collection, doc, getDocs, query, updateDoc, where } from 'firebase/firestore';
-import { db } from '../firebase';
-import { ProfileModel } from '../models/ProfileModel';
+import { Dimensions } from 'react-native'
+import { Ionicons } from '@expo/vector-icons'
+import { ApplicationState } from '../redux/ReduxStore'
+import { FieldValue, arrayRemove, arrayUnion, collection, doc, getDocs, query, updateDoc, where } from 'firebase/firestore'
+import { db } from '../firebase'
+import { ProfileModel } from '../models/ProfileModel'
+import { useSelector } from 'react-redux'
 
 
 interface PostProps {

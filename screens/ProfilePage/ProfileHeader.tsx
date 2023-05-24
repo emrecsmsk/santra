@@ -18,11 +18,11 @@ interface ProfileHeaderProps {
     headerPhoto: string,
     following: string[],
     followers: string[],
-    showEdit: boolean,
-    email: string
+    isSearched: boolean,
+    otherProfile: boolean
 }
 
-const ProfileHeader: FC<ProfileHeaderProps> = ({ id, name, userName, profilePhoto, headerPhoto, following, followers, showEdit, email }) => {
+const ProfileHeader: FC<ProfileHeaderProps> = ({ id, name, userName, profilePhoto, headerPhoto, following, followers, isSearched, otherProfile }) => {
 
     const { profileModel } = useSelector((state: ApplicationState) => state.profileReducer)
     const [isFollowing, setIsFollowing] = useState(false)
@@ -78,14 +78,14 @@ const ProfileHeader: FC<ProfileHeaderProps> = ({ id, name, userName, profilePhot
     }
 
     const goBack = () => {
-        //navigation.pop();
+        navigation.pop();
     }
 
     return (
         <View>
             <Image style={styles.headerImage} source={{ uri: headerPhoto }} />
             {
-                showEdit == false ?
+                isSearched || otherProfile ?
                     <TouchableOpacity style={styles.backButton}
                         onPress={goBack}>
                         <Ionicons name="chevron-back" size={24} color="black" />
@@ -98,7 +98,7 @@ const ProfileHeader: FC<ProfileHeaderProps> = ({ id, name, userName, profilePhot
             <Text style={styles.name}>{name}</Text>
             <Text style={styles.userName}>@{userName}</Text>
             {
-                showEdit ?
+                profileModel!.id === id  ?
                     <View style={styles.editAndFollowingButtonView}>
                         <TouchableOpacity >
                             <Text style={styles.editAndFollowingtButtonText}>Profili Düzenle</Text>

@@ -183,6 +183,7 @@ const SignUpNextScreen: FC = () => {
                 )
                 await saveUser()
                 dispatch(LoginReducer.setIsLoggedIn(true))
+                dispatch(ProfileReducer.getProfile())
 
             })
             .catch((error) => {
