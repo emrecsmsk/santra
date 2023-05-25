@@ -9,6 +9,7 @@ import { db } from '../../firebase'
 import ProfileReducer from '../../redux/reducers/ProfileReducer'
 import { Ionicons } from '@expo/vector-icons'
 import { useNavigation } from '@react-navigation/native'
+import NavigationConstants from '../../navigation/NavigationConstants'
 
 interface ProfileHeaderProps {
     id: string,
@@ -98,7 +99,7 @@ const ProfileHeader: FC<ProfileHeaderProps> = ({ id, name, userName, profilePhot
             <Text style={styles.name}>{name}</Text>
             <Text style={styles.userName}>@{userName}</Text>
             {
-                profileModel!.id === id  ?
+                profileModel!.id === id ?
                     <View style={styles.editAndFollowingButtonView}>
                         <TouchableOpacity >
                             <Text style={styles.editAndFollowingtButtonText}>Profili Düzenle</Text>
@@ -120,11 +121,11 @@ const ProfileHeader: FC<ProfileHeaderProps> = ({ id, name, userName, profilePhot
                         </View>
             }
             <View style={styles.viewRow} >
-                <TouchableOpacity style={styles.followAndFollowerButton}  >
+                <TouchableOpacity style={styles.followAndFollowerButton} onPress={() => navigation.push(NavigationConstants.followingAndFollowersScreen, { userName, followers, following, initialTab: 'following' })} >
                     <Text style={styles.followAndFollowerCountText}>{following.length}</Text>
                     <Text style={styles.followAndFollowerText}> Takip edilen  </Text>
                 </TouchableOpacity>
-                <TouchableOpacity style={styles.followAndFollowerButton}  >
+                <TouchableOpacity style={styles.followAndFollowerButton} onPress={() => navigation.push(NavigationConstants.followingAndFollowersScreen, { userName, followers, following, initialTab: 'followers' })} >
                     <Text style={styles.followAndFollowerCountText}>{followers.length}</Text>
                     <Text style={styles.followAndFollowerText}> Takipçi</Text>
                 </TouchableOpacity>

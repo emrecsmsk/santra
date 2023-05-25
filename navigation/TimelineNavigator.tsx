@@ -3,8 +3,8 @@ import NavigationConstants from "./NavigationConstants";
 import { createStackNavigator } from "@react-navigation/stack";
 import TimelineScreen from "../screens/TimelinePage/TimelineScreen";
 import SharePostScreen from "../screens/TimelinePage/SharePostPage/SharePostScreen";
-import { StyleSheet, TouchableOpacity, View, Text } from "react-native";
-import colors from "../utilies/colors";
+import ProfileScreen from "../screens/ProfilePage/ProfileScreen";
+import FollowingAndFollowersScreen from "../screens/ProfilePage/Following&FollowersPage/FollowingAndFollowersScreen";
 
 
 
@@ -26,6 +26,19 @@ const TimelineNavigator: FC = () => {
                     headerBackTitle: " ",
                     
                 }} />
+                <Stack.Screen
+                name={NavigationConstants.profile}
+                component={ProfileScreen}
+                options={{ headerShown: false }}
+            />
+            <Stack.Screen
+                name={NavigationConstants.followingAndFollowersScreen}
+                component={FollowingAndFollowersScreen}
+                options={{
+                    title: " ",
+                    headerBackTitle: " ",
+                }}
+            />
         </Stack.Navigator >
     )
 }

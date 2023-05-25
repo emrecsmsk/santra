@@ -9,6 +9,8 @@ import { FieldValue, arrayRemove, arrayUnion, collection, doc, getDocs, query, u
 import { db } from '../firebase'
 import { ProfileModel } from '../models/ProfileModel'
 import { useSelector } from 'react-redux'
+import { useNavigation } from '@react-navigation/native'
+import NavigationConstants from '../navigation/NavigationConstants'
 
 
 interface PostProps {
@@ -30,6 +32,7 @@ const Post: FC<PostProps> = ({ postId, userId, postPhoto, description, likes, is
     const [stateCommentCount, setStateCommentCount] = useState(commentCount)
     const [stateIsSaved, setStateIsSaved] = useState(isSaved)
     const [profileModelState, setProfileModelState] = useState<ProfileModel>()
+    const navigation = useNavigation<any>()
 
 
     useEffect(() => {
@@ -81,7 +84,9 @@ const Post: FC<PostProps> = ({ postId, userId, postPhoto, description, likes, is
                 <Card onPress={(_) => console.log('posta tıklandı')} elevation={1}>
                     <View style={styles.view}>
                         <View style={styles.viewRow}>
-                            <Avatar.Image size={45} source={{ uri: profileModelState?.profilePhoto }} style={styles.avatar}/>
+                            <TouchableOpacity onPress={() => navigation.navigate(NavigationConstants.profile, {id: userId})}>
+                                <Avatar.Image size={45} source={{ uri: profileModelState?.profilePhoto }} style={styles.avatar} />
+                            </TouchableOpacity>
                             <View style={styles.viewColumn}>
                                 <View style={styles.viewRow}>
                                     <Text style={styles.name} numberOfLines={1}>{profileModelState.name}</Text>

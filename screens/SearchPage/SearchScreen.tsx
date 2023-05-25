@@ -32,8 +32,12 @@ const SearchScreen: FC = () => {
   useEffect(() => {
     if (search.trim() !== '' && allUsers !== undefined) {
       const filteredAll: any[] = all!.filter((all) => {
-        return all.name.toLocaleLowerCase().includes(search.toLocaleLowerCase()
-          || all.userName && all.userName.toLocaleLowerCase().includes(search.toLocaleLowerCase()))
+        if (all.userName !== undefined) {
+          return all.userName.toLocaleLowerCase().includes(search.toLocaleLowerCase())
+            || all.name.toLocaleLowerCase().includes(search.toLocaleLowerCase())
+        } else {
+          return all.name.toLocaleLowerCase().includes(search.toLocaleLowerCase())
+        }
       })
       setSearchedAll(filteredAll)
 
@@ -132,15 +136,15 @@ const SearchScreen: FC = () => {
                     return (
                       <SearchLine id={item.id} photo={item.profilePhoto} userName={item.userName} name={item.name} position={item.position} shirtNumber={item.shirtNumber} type={'user'} />
                     )
-                  }else if(item.players !== undefined){
+                  } else if (item.players !== undefined) {
                     return (
                       <SearchLine id={item.id} photo={item.photo} userName={item.userName} name={item.name} position={item.position} shirtNumber={item.shirtNumber} type={'team'} />
                     )
-                  }else{
+                  } else {
                     return (
-                      <SearchLine id={item.id} photo={item.photos[0]} userName={item.name} type={'footballCourt'}/>
+                      <SearchLine id={item.id} photo={item.photos[0]} userName={item.name} type={'footballCourt'} />
                     )
-                  } 
+                  }
                 }
               }
             />
