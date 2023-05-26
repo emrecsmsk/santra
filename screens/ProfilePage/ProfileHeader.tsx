@@ -101,7 +101,7 @@ const ProfileHeader: FC<ProfileHeaderProps> = ({ id, name, userName, profilePhot
             {
                 profileModel!.id === id ?
                     <View style={styles.editAndFollowingButtonView}>
-                        <TouchableOpacity >
+                        <TouchableOpacity onPress={() => navigation.navigate(NavigationConstants.profileEdit)}>
                             <Text style={styles.editAndFollowingtButtonText}>Profili Düzenle</Text>
                         </TouchableOpacity>
                     </View>

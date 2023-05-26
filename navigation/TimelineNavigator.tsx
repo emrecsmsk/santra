@@ -5,6 +5,7 @@ import TimelineScreen from "../screens/TimelinePage/TimelineScreen";
 import SharePostScreen from "../screens/TimelinePage/SharePostPage/SharePostScreen";
 import ProfileScreen from "../screens/ProfilePage/ProfileScreen";
 import FollowingAndFollowersScreen from "../screens/ProfilePage/Following&FollowersPage/FollowingAndFollowersScreen";
+import ProfileEdit from "../screens/ProfilePage/ProfileEditPage/ProfileEdit";
 
 
 
@@ -24,9 +25,9 @@ const TimelineNavigator: FC = () => {
                 options={{
                     title: "Gönderi paylaş",
                     headerBackTitle: " ",
-                    
+
                 }} />
-                <Stack.Screen
+            <Stack.Screen
                 name={NavigationConstants.profile}
                 component={ProfileScreen}
                 options={{ headerShown: false }}
@@ -36,6 +37,14 @@ const TimelineNavigator: FC = () => {
                 component={FollowingAndFollowersScreen}
                 options={{
                     title: " ",
+                    headerBackTitle: " ",
+                }}
+            />
+            <Stack.Screen
+                name={NavigationConstants.profileEdit}
+                component={ProfileEdit}
+                options={{
+                    title: "Profili düzenle",
                     headerBackTitle: " ",
                 }}
             />

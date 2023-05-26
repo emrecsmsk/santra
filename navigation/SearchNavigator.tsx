@@ -4,6 +4,7 @@ import { createStackNavigator } from "@react-navigation/stack";
 import SearchScreen from "../screens/SearchPage/SearchScreen";
 import ProfileScreen from "../screens/ProfilePage/ProfileScreen";
 import FollowingAndFollowersScreen from "../screens/ProfilePage/Following&FollowersPage/FollowingAndFollowersScreen";
+import ProfileEdit from "../screens/ProfilePage/ProfileEditPage/ProfileEdit";
 
 
 
@@ -30,6 +31,14 @@ const SearchNavigator: FC = () => {
                 component={FollowingAndFollowersScreen}
                 options={{
                     title: " ",
+                    headerBackTitle: " ",
+                }}
+            />
+            <Stack.Screen
+                name={NavigationConstants.profileEdit}
+                component={ProfileEdit}
+                options={{
+                    title: "Profili düzenle",
                     headerBackTitle: " ",
                 }}
             />

@@ -15,5 +15,6 @@ export default {
     messaging: "Messaging",
     profileNavigator: "ProfileNavigator",
     profile: "Profile",
+    profileEdit: "ProfileEdit",
     followingAndFollowersScreen: "FollowingAndFollowersScreen"
 }

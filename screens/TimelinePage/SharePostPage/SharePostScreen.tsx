@@ -11,6 +11,7 @@ import { getDownloadURL, ref, uploadBytes } from 'firebase/storage'
 import { db, storage } from '../../../firebase'
 import { addDoc, collection, doc, updateDoc } from 'firebase/firestore'
 import LottieView from 'lottie-react-native'
+import { SaveFormat, manipulateAsync } from 'expo-image-manipulator'
 
 const SharePostScreen = () => {
 
@@ -23,9 +24,6 @@ const SharePostScreen = () => {
 
     useEffect(() => {
         setShareButton()
-    }, [])
-
-    useEffect(() => {
         if (saved === 1) {
             onPressShare()
         }
@@ -52,7 +50,12 @@ const SharePostScreen = () => {
         })
 
         if (!result.canceled) {
-            setImage(result.assets[0].uri)
+            const manipResult = await manipulateAsync(
+                result.assets[0].uri,
+                [],
+                { compress: 0.01, format: SaveFormat.JPEG }
+            )
+            setImage(manipResult.uri)
         }
     }
 
@@ -96,7 +99,7 @@ const SharePostScreen = () => {
             const response = await fetch(imageUri)
             const blobFile = await response.blob()
 
-            const reference = ref(storage, name)
+            const reference = ref(storage, name+'post')
             const result = await uploadBytes(reference, blobFile)
             const url = await getDownloadURL(result.ref)
 
