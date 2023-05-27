@@ -67,6 +67,7 @@ const SharePostScreen = () => {
             userId: profileModel?.id,
             description: text,
             likes: [],
+            comments: []
         }
         const postsCollectionRef = collection(db, "posts")
 

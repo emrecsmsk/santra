@@ -130,7 +130,7 @@ const ProfileScreen: FC = () => {
                 refreshControl={
                   <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
                 }
-                renderItem={({ item }) => <Post postId={item.postId} userId={item.userId} postPhoto={item.postPhoto} description={item.description} likes={item.likes} isSaved={true} likeCount={0} commentCount={0} />}
+                renderItem={({ item }) => <Post postId={item.postId} userId={item.userId} postPhoto={item.postPhoto} description={item.description} likes={item.likes} isSaved={true} comments={item.comments} />}
                 onEndReached={() => fetchMorePosts(profileModel!.id)}
               />
             }

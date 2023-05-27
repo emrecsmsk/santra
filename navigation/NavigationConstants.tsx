@@ -9,6 +9,7 @@ export default {
     search: "Search",
     timelineNavigator: "TimelineNavigator",
     timeline: "Timeline",
+    comments: "Comments",
     sharePost: "SharePost",
     messagesNavigator: "MessagesNavigator",
     messages: "Messages",

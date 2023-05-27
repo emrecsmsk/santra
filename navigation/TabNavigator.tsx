@@ -55,7 +55,7 @@ const TabNavigator: FC = () => {
             {isLoggedIn ?
                 <Tab.Navigator
                     initialRouteName={NavigationConstants.homeNavigator}
-                    screenOptions={{ headerShown: false }}>
+                    screenOptions={{ headerShown: false ,tabBarHideOnKeyboard: true}}>
                     <Tab.Screen
                         name={NavigationConstants.homeNavigator}
                         component={HomeNavigator}

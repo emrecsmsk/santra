@@ -4,6 +4,7 @@ import { createStackNavigator } from "@react-navigation/stack";
 import ProfileScreen from "../screens/ProfilePage/ProfileScreen";
 import FollowingAndFollowersScreen from "../screens/ProfilePage/Following&FollowersPage/FollowingAndFollowersScreen";
 import ProfileEdit from "../screens/ProfilePage/ProfileEditPage/ProfileEdit";
+import CommentsScreen from "../screens/TimelinePage/CommentPage/CommentsScreen";
 
 
 
@@ -32,6 +33,14 @@ const ProfileNavigator: FC = () => {
                 component={ProfileEdit}
                 options={{
                     title: "Profili düzenle",
+                    headerBackTitle: " ",
+                }}
+            />
+            <Stack.Screen
+                name={NavigationConstants.comments}
+                component={CommentsScreen}
+                options={{
+                    title: "Yorumlar",
                     headerBackTitle: " ",
                 }}
             />
