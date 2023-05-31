@@ -1,5 +1,3 @@
-import { BirthModel } from "./BirthModel";
-
 export interface ProfileModel {
     id: string,
     birth: string,
@@ -10,9 +8,10 @@ export interface ProfileModel {
     position: string,
     preferredFoot: string,
     userName: string,
-    followers: string[]
-    following: string[]
-    teams: string[]
+    followers: string[],
+    following: string[],
+    teams: string[],
+    favoriteFootballCourts: string[]
     profilePhoto: string,
     headerPhoto: string
 }

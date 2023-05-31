@@ -5,6 +5,8 @@ export default {
     signUpNext: "SignUpNext",
     homeNavigator: "HomeNavigator",
     home: "Home",
+    favoriteFootballCourts: "FavoriteFootballCourts",
+    footballCourt: "FootballCourt",
     searchNavigator: "SearchNavigator",
     search: "Search",
     timelineNavigator: "TimelineNavigator",

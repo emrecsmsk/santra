@@ -1,5 +1,9 @@
 export interface FootballCourtModel {
     id: string,
     name: string,
-    photos: string[]
+    location: string,
+    photos: string[],
+    facilities: FacilitiesModel,
+    reservation: ReservationDataModel,
+    address: string
 }

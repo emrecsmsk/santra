@@ -2,6 +2,8 @@ import React, { FC } from 'react';
 import { View, Text, StyleSheet, FlatList, Dimensions, Image, TouchableOpacity } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Ionicons } from '@expo/vector-icons';
+import NavigationConstants from '../../navigation/NavigationConstants';
+import { useNavigation } from '@react-navigation/native';
 
 
 const HomeScreen: FC = () => {
@@ -10,6 +12,8 @@ const HomeScreen: FC = () => {
     { id: '2', team: 'Fenerbahçe',  dateTime: "29 Ocak" , imageUrl:"https://upload.wikimedia.org/wikipedia/tr/8/86/Fenerbahçe_SK.png"},
     { id: '3', team: 'Beşiktaş', dateTime: "30 Ocak" , imageUrl:"https://upload.wikimedia.org/wikipedia/commons/0/08/Beşiktaş_Logo_Beşiktaş_Amblem_Beşiktaş_Arma.png"},
   ];
+
+  const navigation = useNavigation<any>()
 
 
 
@@ -68,7 +72,7 @@ const HomeScreen: FC = () => {
           </View>
         </TouchableOpacity>
 
-        <TouchableOpacity  onPress={() => console.log('Favori Halısahalar')}>
+        <TouchableOpacity  onPress={() => navigation.push(NavigationConstants.favoriteFootballCourts)}>
           <View >
             <LinearGradient
               colors={["#5bc62a", "#b8d626"]}

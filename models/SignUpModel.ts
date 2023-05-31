@@ -7,9 +7,10 @@ export interface SignUpModel {
     position: string,
     preferredFoot: string,
     userName: string,
-    followers?: string[]
-    following?: string[]
-    teams?: string[]
+    followers?: string[],
+    following?: string[],
+    teams?: string[],
+    favoriteFootballCourts: string[],
     profilePhoto: string,
     headerPhoto: string
 }

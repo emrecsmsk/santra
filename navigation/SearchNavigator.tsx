@@ -6,6 +6,7 @@ import ProfileScreen from "../screens/ProfilePage/ProfileScreen";
 import FollowingAndFollowersScreen from "../screens/ProfilePage/Following&FollowersPage/FollowingAndFollowersScreen";
 import ProfileEdit from "../screens/ProfilePage/ProfileEditPage/ProfileEdit";
 import CommentsScreen from "../screens/TimelinePage/CommentPage/CommentsScreen";
+import FootballCourtScreen from "../screens/HomePage/FootballCourtPage/FootballCourtScreen";
 
 
 
@@ -49,6 +50,13 @@ const SearchNavigator: FC = () => {
                 options={{
                     title: "Yorumlar",
                     headerBackTitle: " ",
+                }}
+            />
+            <Stack.Screen
+                name={NavigationConstants.footballCourt}
+                component={FootballCourtScreen}
+                options={{
+                    headerShown: false,
                 }}
             />
         </Stack.Navigator >
