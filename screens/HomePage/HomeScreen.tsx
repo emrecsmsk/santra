@@ -1,27 +1,47 @@
-import React, { FC } from 'react';
-import { View, Text, StyleSheet, FlatList, Dimensions, Image, TouchableOpacity } from 'react-native';
+import React, { FC, useEffect, useState } from 'react';
+import { View, Text, StyleSheet, FlatList, Dimensions, Image, TouchableOpacity, Button } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Ionicons } from '@expo/vector-icons';
-import NavigationConstants from '../../navigation/NavigationConstants';
+import { FootballCourtModel } from '../../models/FootballCourtModel';
+import { collection, getDocs, query } from 'firebase/firestore'
+import { db } from '../../firebase';
 import { useNavigation } from '@react-navigation/native';
-
+import NavigationConstants from '../../navigation/NavigationConstants';
 
 const HomeScreen: FC = () => {
   const DATA = [
-    { id: '1', team: 'Galatasaray', dateTime: "28 Ocak" , imageUrl:"https://upload.wikimedia.org/wikipedia/commons/f/f6/Galatasaray_Sports_Club_Logo.png"},
-    { id: '2', team: 'Fenerbahçe',  dateTime: "29 Ocak" , imageUrl:"https://upload.wikimedia.org/wikipedia/tr/8/86/Fenerbahçe_SK.png"},
-    { id: '3', team: 'Beşiktaş', dateTime: "30 Ocak" , imageUrl:"https://upload.wikimedia.org/wikipedia/commons/0/08/Beşiktaş_Logo_Beşiktaş_Amblem_Beşiktaş_Arma.png"},
+    { id: '1', team: 'Galatasaray', dateTime: "28 Ocak", imageUrl: "https://upload.wikimedia.org/wikipedia/commons/f/f6/Galatasaray_Sports_Club_Logo.png" },
+    { id: '2', team: 'Fenerbahçe', dateTime: "29 Ocak", imageUrl: "https://upload.wikimedia.org/wikipedia/tr/8/86/Fenerbahçe_SK.png" },
+    { id: '3', team: 'Beşiktaş', dateTime: "30 Ocak", imageUrl: "https://upload.wikimedia.org/wikipedia/commons/0/08/Beşiktaş_Logo_Beşiktaş_Amblem_Beşiktaş_Arma.png" },
   ];
 
   const navigation = useNavigation<any>()
+  const [footballCourts, setFootballCourts] = useState<FootballCourtModel[]>([]);
 
+  useEffect(() => {
+    fetchFootballCourts();
+  }, []);
 
+  const fetchFootballCourts = async () => {
+    try {
+      const q = query(collection(db, "footballCourts"));
+      const querySnapshot = await getDocs(q);
+      const courts: FootballCourtModel[] = [];
+      querySnapshot.forEach((doc) => {
+        const court = { id: doc.id, ...doc.data() } as FootballCourtModel;
+        courts.push(court);
+      });
+      setFootballCourts(courts);
+    } catch (error) {
+      console.log("Hata:", error);
+    }
+  };
 
   return (
     <View style={styles.motherView}>
 
       <View style={styles.firstView}>
-      <FlatList
+        <FlatList
           data={DATA}
           keyExtractor={(item) => item.id}
           horizontal
@@ -42,7 +62,7 @@ const HomeScreen: FC = () => {
               <View style={styles.view2}>
                 <Image
                   style={{ width: 50, height: 50, borderRadius: 25 }}
-                  source={{uri: item.imageUrl}}
+                  source={{ uri: item.imageUrl }}
                 />
               </View>
             </LinearGradient>
@@ -52,16 +72,29 @@ const HomeScreen: FC = () => {
 
       <View style={styles.secondView}>
         <Text style={styles.title}>Sponsorlu Halısahalar</Text>
-        <Image style={styles.card2}
-          source={{
-            uri: "http://kuzeysports.com/wp-content/uploads/257316_o49091.jpg"
-          }}
-        />
+        {
+          footballCourts &&
+          <FlatList
+            data={footballCourts}
+            horizontal
+            showsHorizontalScrollIndicator={false}
+            renderItem={({ item }) => (
+              <View >
+                <Image
+                  style={styles.card2}
+                  source={{ uri: item.photos[0] }}
+                />
+                <Text style={styles.footballCourtName}>{item.name}</Text>
+              </View>
+            )}
+            keyExtractor={(item) => item.id}
+          />
+        }
       </View>
 
       <View style={styles.thirdView}>
 
-        <TouchableOpacity  onPress={() => console.log('Takım')}>
+        <TouchableOpacity onPress={() => console.log('Takım')}>
           <View >
             <LinearGradient
               colors={["#5d4fed", "#46cceb"]}
@@ -72,7 +105,7 @@ const HomeScreen: FC = () => {
           </View>
         </TouchableOpacity>
 
-        <TouchableOpacity  onPress={() => navigation.push(NavigationConstants.favoriteFootballCourts)}>
+        <TouchableOpacity onPress={() => navigation.push(NavigationConstants.favoriteFootballCourts)}>
           <View >
             <LinearGradient
               colors={["#5bc62a", "#b8d626"]}
@@ -83,7 +116,7 @@ const HomeScreen: FC = () => {
           </View>
         </TouchableOpacity>
 
-        <TouchableOpacity  onPress={() => console.log('Maçlar')}>
+        <TouchableOpacity onPress={() => console.log('Maçlar')}>
           <View >
             <LinearGradient
               colors={["#f78039", "#ffbe2c"]}
@@ -110,7 +143,7 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   largeText: {
-    fontSize: 32, 
+    fontSize: 32,
   },
   thirdView: {
     flex: 1,
@@ -118,14 +151,14 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     marginLeft: 30,
     marginRight: 30,
-    marginTop:30
+    marginTop: 30
   },
-  view1:{
-    flex:2
+  view1: {
+    flex: 2
   },
-  view2:{
-    flex:1,
-    marginBottom:35
+  view2: {
+    flex: 1,
+    marginBottom: 35
   },
   lineGradient: {
     width: 100,
@@ -139,11 +172,17 @@ const styles = StyleSheet.create({
     fontSize: 16,
     textAlign: "center"
   },
+  footballCourtName: {
+    fontSize: 16,
+    fontWeight: '200',
+    marginLeft: 25,
+    marginTop: 4
+  },
   card: {
     width: Dimensions.get('window').width - 130,
     height: 150,
-    flexDirection:"row",
-    backgroundColor: 'pink',
+    flexDirection: "row",
+    backgroundColor: 'grey',
     borderRadius: 20,
     marginHorizontal: 10,
     alignItems: 'center',
@@ -163,14 +202,14 @@ const styles = StyleSheet.create({
   cardText: {
     fontSize: 18,
     color: 'white',
-    marginLeft:15,
+    marginLeft: 15,
   },
   cardText2: {
     fontSize: 23,
     fontWeight: '700',
     color: 'white',
-    marginLeft:15,
-    marginBottom:10
+    marginLeft: 15,
+    marginBottom: 10
   },
   title: {
     fontSize: 16,
@@ -184,3 +223,4 @@ const styles = StyleSheet.create({
 });
 
 export default HomeScreen;
+
