@@ -6,8 +6,8 @@ import SharePostScreen from "../screens/TimelinePage/SharePostPage/SharePostScre
 import ProfileScreen from "../screens/ProfilePage/ProfileScreen";
 import FollowingAndFollowersScreen from "../screens/ProfilePage/Following&FollowersPage/FollowingAndFollowersScreen";
 import ProfileEdit from "../screens/ProfilePage/ProfileEditPage/ProfileEdit";
-import CommentScreen from "../screens/TimelinePage/CommentPage/CommentsScreen";
 import CommentsScreen from "../screens/TimelinePage/CommentPage/CommentsScreen";
+import MessagingScreen from "../screens/MessagesPage/MessagingScreen";
 
 
 
@@ -56,6 +56,13 @@ const TimelineNavigator: FC = () => {
                 options={{
                     title: "Yorumlar",
                     headerBackTitle: " ",
+                }}
+            />
+            <Stack.Screen
+                name={NavigationConstants.messaging}
+                component={MessagingScreen}
+                options={{
+                    headerBackTitle: " "
                 }}
             />
         </Stack.Navigator >

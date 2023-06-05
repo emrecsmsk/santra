@@ -5,6 +5,7 @@ import ProfileScreen from "../screens/ProfilePage/ProfileScreen";
 import FollowingAndFollowersScreen from "../screens/ProfilePage/Following&FollowersPage/FollowingAndFollowersScreen";
 import ProfileEdit from "../screens/ProfilePage/ProfileEditPage/ProfileEdit";
 import CommentsScreen from "../screens/TimelinePage/CommentPage/CommentsScreen";
+import MessagingScreen from "../screens/MessagesPage/MessagingScreen";
 
 
 
@@ -42,6 +43,13 @@ const ProfileNavigator: FC = () => {
                 options={{
                     title: "Yorumlar",
                     headerBackTitle: " ",
+                }}
+            />
+            <Stack.Screen
+                name={NavigationConstants.messaging}
+                component={MessagingScreen}
+                options={{
+                    headerBackTitle: " "
                 }}
             />
         </Stack.Navigator >

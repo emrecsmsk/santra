@@ -4,9 +4,9 @@ import { createStackNavigator } from "@react-navigation/stack";
 import HomeScreen from "../screens/HomePage/HomeScreen";
 import { Ionicons } from '@expo/vector-icons';
 import { TouchableOpacity } from "react-native";
-import SharePostScreen from "../screens/TimelinePage/SharePostPage/SharePostScreen";
 import FavoriteFootballCourts from "../screens/HomePage/FavoriteFootballCourtsPage/FavoriteFootballCourts";
 import FootballCourtScreen from "../screens/HomePage/FootballCourtPage/FootballCourtScreen";
+import MessagingScreen from "../screens/MessagesPage/MessagingScreen";
 
 
 
@@ -35,6 +35,13 @@ const HomeNavigator: FC = () => {
                 component={FootballCourtScreen}
                 options={{
                     headerShown: false,
+                }}
+            />
+            <Stack.Screen
+                name={NavigationConstants.messaging}
+                component={MessagingScreen}
+                options={{
+                    headerBackTitle: " "
                 }}
             />
         </Stack.Navigator >

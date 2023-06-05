@@ -4,7 +4,7 @@ import { Avatar } from 'react-native-paper'
 import colors from '../../utilies/colors'
 import { useDispatch, useSelector } from 'react-redux'
 import { ApplicationState } from '../../redux/ReduxStore'
-import { FieldValue, arrayRemove, arrayUnion, doc, updateDoc } from 'firebase/firestore'
+import { FieldValue, addDoc, arrayRemove, arrayUnion, collection, doc, getDocs, query, updateDoc, where } from 'firebase/firestore'
 import { db } from '../../firebase'
 import ProfileReducer from '../../redux/reducers/ProfileReducer'
 import { Ionicons } from '@expo/vector-icons'
@@ -29,6 +29,8 @@ const ProfileHeader: FC<ProfileHeaderProps> = ({ id, name, userName, profilePhot
     const [isFollowing, setIsFollowing] = useState(false)
     const dispatch = useDispatch<any>()
     const navigation = useNavigation<any>()
+    const [isExist1, setIsExist1] = useState<boolean>()
+    const [isExist2, setIsExist2] = useState<boolean>()
 
 
     useEffect(() => {
@@ -40,6 +42,13 @@ const ProfileHeader: FC<ProfileHeaderProps> = ({ id, name, userName, profilePhot
         isFollowing()
 
     }, [])
+
+    useEffect(() => {
+        if (isExist1 === false && isExist2 === false) {
+            createChat()
+        }
+
+    }, [isExist1, isExist2])
 
     const onPressFollow = async () => {
 
@@ -82,6 +91,48 @@ const ProfileHeader: FC<ProfileHeaderProps> = ({ id, name, userName, profilePhot
         navigation.pop();
     }
 
+    const onPressMessage = async () => {
+        const q1 = query(
+            collection(db, "chats"),
+            where("users", "==", [profileModel?.id, id]
+            ))
+
+        const querySnapshot1 = await getDocs(q1)
+
+        if (querySnapshot1.empty) {
+            setIsExist1(false)
+        } else {
+            querySnapshot1.docs.map(
+                (item) =>
+                    navigation.navigate(NavigationConstants.messaging, { chatId: item.id, name })
+            )
+        }
+
+        const q2 = query(
+            collection(db, "chats"),
+            where("users", "==", [id, profileModel?.id]
+            ))
+
+        const querySnapshot2 = await getDocs(q2)
+
+        if (querySnapshot2.empty) {
+            setIsExist2(false)
+        } else {
+            querySnapshot2.docs.map(
+                (item) =>
+                    navigation.navigate(NavigationConstants.messaging, { chatId: item.id, name })
+            )
+        }
+    }
+
+    const createChat = async () => {
+        const chatListRef = collection(db, "chats")
+        const response = await addDoc(chatListRef, {
+            users: [id, profileModel?.id]
+        });
+        navigation.navigate(NavigationConstants.messaging, { chatId: response.id, name });
+    }
+
     return (
         <View>
             <Image style={styles.headerImage} source={{ uri: headerPhoto }} />
@@ -106,19 +157,26 @@ const ProfileHeader: FC<ProfileHeaderProps> = ({ id, name, userName, profilePhot
                         </TouchableOpacity>
                     </View>
                     :
-                    isFollowing
-                        ?
-                        <View style={styles.editAndFollowingButtonView}>
-                            <TouchableOpacity onPress={onPressFollow}>
-                                <Text style={styles.editAndFollowingtButtonText}>Takip ediliyor</Text>
+                    <>
+                        <View style={styles.messageButton}>
+                            <TouchableOpacity onPress={() => onPressMessage()}>
+                                <Ionicons name="mail-outline" size={18} color="black" />
                             </TouchableOpacity>
                         </View>
-                        :
-                        <View style={styles.followButtonView}>
-                            <TouchableOpacity onPress={onPressFollow}>
-                                <Text style={styles.followButtonText}>Takip et</Text>
-                            </TouchableOpacity>
-                        </View>
+                        {isFollowing
+                            ?
+                            <View style={styles.editAndFollowingButtonView}>
+                                <TouchableOpacity onPress={onPressFollow}>
+                                    <Text style={styles.editAndFollowingtButtonText}>Takip ediliyor</Text>
+                                </TouchableOpacity>
+                            </View>
+                            :
+                            <View style={styles.followButtonView}>
+                                <TouchableOpacity onPress={onPressFollow}>
+                                    <Text style={styles.followButtonText}>Takip et</Text>
+                                </TouchableOpacity>
+                            </View>}
+                    </>
             }
             <View style={styles.viewRow} >
                 <TouchableOpacity style={styles.followAndFollowerButton} onPress={() => navigation.push(NavigationConstants.followingAndFollowersScreen, { userName, followers, following, initialTab: 'following' })} >
@@ -219,8 +277,19 @@ const styles = StyleSheet.create({
         marginLeft: 20,
         backgroundColor: colors.white,
         borderRadius: 10
+    },
+    messageButton: {
+        position: 'absolute',
+        marginTop: 160,
+        marginLeft: Dimensions.get('window').width - 176,
+        height: 32,
+        width: 32,
+        borderWidth: 1,
+        borderRadius: 16,
+        borderColor: colors.lightGrey,
+        justifyContent: 'center',
+        alignItems: 'center'
     }
-
 })
 
 export default ProfileHeader

@@ -7,6 +7,7 @@ import FollowingAndFollowersScreen from "../screens/ProfilePage/Following&Follow
 import ProfileEdit from "../screens/ProfilePage/ProfileEditPage/ProfileEdit";
 import CommentsScreen from "../screens/TimelinePage/CommentPage/CommentsScreen";
 import FootballCourtScreen from "../screens/HomePage/FootballCourtPage/FootballCourtScreen";
+import MessagingScreen from "../screens/MessagesPage/MessagingScreen";
 
 
 
@@ -57,6 +58,13 @@ const SearchNavigator: FC = () => {
                 component={FootballCourtScreen}
                 options={{
                     headerShown: false,
+                }}
+            />
+            <Stack.Screen
+                name={NavigationConstants.messaging}
+                component={MessagingScreen}
+                options={{
+                    headerBackTitle: " "
                 }}
             />
         </Stack.Navigator >

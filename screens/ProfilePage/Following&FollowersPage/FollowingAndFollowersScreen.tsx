@@ -137,7 +137,7 @@ const FollowingAndFollowersScreen: FC = () => {
                     <Tabs.Tab name="following" label={"Takip ettikleri"}>
                         {followingUsersState &&
                             <Tabs.FlatList
-                                data={followerUsersState}
+                                data={followingUsersState}
                                 keyExtractor={item => item.id}
                                 renderItem={({ item }) => <SearchLine id={item.id} photo={item.profilePhoto} userName={item.userName} name={item.name} position={item.position} shirtNumber={item.shirtNumber} type={'user'} />}
                                 onEndReached={fetchMoreUsers}
@@ -161,6 +161,5 @@ const styles = StyleSheet.create({
         height: 200
     },
 })
-
 
 export default FollowingAndFollowersScreen
