@@ -113,7 +113,7 @@ const ProfileScreen: FC = () => {
         :
         <Tabs.Container
           renderHeader={() => (
-            <ProfileHeader id={profileModelState.id} name={profileModelState.name} userName={profileModelState.userName} profilePhoto={profileModelState.profilePhoto} headerPhoto={profileModelState.headerPhoto} following={profileModelState.following} followers={profileModelState.followers} isSearched={isSearched} otherProfile={otherProfile} />
+            <ProfileHeader id={profileModelState.id} name={profileModelState.name} userName={profileModelState.userName} profilePhoto={profileModelState.profilePhoto} headerPhoto={profileModelState.headerPhoto} following={profileModelState.following} followers={profileModelState.followers} otherProfile={otherProfile} />
           )}
           minHeaderHeight={30}
         >
@@ -130,7 +130,7 @@ const ProfileScreen: FC = () => {
                 refreshControl={
                   <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
                 }
-                renderItem={({ item }) => <Post postId={item.postId} userId={item.userId} postPhoto={item.postPhoto} description={item.description} likes={item.likes} isSaved={true} comments={item.comments} />}
+                renderItem={({ item }) => <Post postId={item.postId} userId={item.userId} postPhoto={item.postPhoto} description={item.description} likes={item.likes} comments={item.comments} />}
                 onEndReached={() => fetchMorePosts(profileModel!.id)}
               />
             }

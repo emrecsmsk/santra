@@ -5,11 +5,13 @@ import colors from '../../utilies/colors'
 import { useDispatch, useSelector } from 'react-redux'
 import { ApplicationState } from '../../redux/ReduxStore'
 import { FieldValue, addDoc, arrayRemove, arrayUnion, collection, doc, getDocs, query, updateDoc, where } from 'firebase/firestore'
-import { db } from '../../firebase'
+import { auth, db } from '../../firebase'
 import ProfileReducer from '../../redux/reducers/ProfileReducer'
 import { Ionicons } from '@expo/vector-icons'
 import { useNavigation } from '@react-navigation/native'
 import NavigationConstants from '../../navigation/NavigationConstants'
+import LoginReducer from '../../redux/reducers/LoginReducer'
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 interface ProfileHeaderProps {
     id: string,
@@ -19,11 +21,10 @@ interface ProfileHeaderProps {
     headerPhoto: string,
     following: string[],
     followers: string[],
-    isSearched: boolean,
     otherProfile: boolean
 }
 
-const ProfileHeader: FC<ProfileHeaderProps> = ({ id, name, userName, profilePhoto, headerPhoto, following, followers, isSearched, otherProfile }) => {
+const ProfileHeader: FC<ProfileHeaderProps> = ({ id, name, userName, profilePhoto, headerPhoto, following, followers, otherProfile }) => {
 
     const { profileModel } = useSelector((state: ApplicationState) => state.profileReducer)
     const [isFollowing, setIsFollowing] = useState(false)
@@ -133,11 +134,18 @@ const ProfileHeader: FC<ProfileHeaderProps> = ({ id, name, userName, profilePhot
         navigation.navigate(NavigationConstants.messaging, { chatId: response.id, name });
     }
 
+    const onPressLogout = async () => {
+        await AsyncStorage.setItem('email', "")
+        await AsyncStorage.setItem('password', "")
+        await auth.signOut()
+        dispatch(LoginReducer.setIsLoggedIn(false))
+    }
+
     return (
         <View>
             <Image style={styles.headerImage} source={{ uri: headerPhoto }} />
             {
-                isSearched || otherProfile ?
+                otherProfile ?
                     <TouchableOpacity style={styles.backButton}
                         onPress={goBack}>
                         <Ionicons name="chevron-back" size={24} color="black" />
@@ -151,14 +159,21 @@ const ProfileHeader: FC<ProfileHeaderProps> = ({ id, name, userName, profilePhot
             <Text style={styles.userName}>@{userName}</Text>
             {
                 profileModel!.id === id ?
-                    <View style={styles.editAndFollowingButtonView}>
-                        <TouchableOpacity onPress={() => navigation.navigate(NavigationConstants.profileEdit)}>
-                            <Text style={styles.editAndFollowingtButtonText}>Profili Düzenle</Text>
-                        </TouchableOpacity>
-                    </View>
+                    <>
+                        <View style={styles.editAndFollowingButtonView}>
+                            <TouchableOpacity onPress={() => navigation.navigate(NavigationConstants.profileEdit)}>
+                                <Text style={styles.editAndFollowingtButtonText}>Profili Düzenle</Text>
+                            </TouchableOpacity>
+                        </View>
+                        <View style={styles.messageAndLogoutButton}>
+                            <TouchableOpacity onPress={() => onPressLogout()}>
+                                <Ionicons name="power" size={18} color="red" />
+                            </TouchableOpacity>
+                        </View>
+                    </>
                     :
                     <>
-                        <View style={styles.messageButton}>
+                        <View style={styles.messageAndLogoutButton}>
                             <TouchableOpacity onPress={() => onPressMessage()}>
                                 <Ionicons name="mail-outline" size={18} color="black" />
                             </TouchableOpacity>
@@ -278,7 +293,7 @@ const styles = StyleSheet.create({
         backgroundColor: colors.white,
         borderRadius: 10
     },
-    messageButton: {
+    messageAndLogoutButton: {
         position: 'absolute',
         marginTop: 160,
         marginLeft: Dimensions.get('window').width - 176,

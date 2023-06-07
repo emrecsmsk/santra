@@ -140,9 +140,13 @@ const SearchScreen: FC = () => {
                     return (
                       <SearchLine id={item.id} photo={item.photo} userName={item.userName} name={item.name} position={item.position} shirtNumber={item.shirtNumber} type={'team'} />
                     )
-                  } else {
+                  } else if (item.address !== undefined) {
                     return (
                       <SearchLine id={item.id} photo={item.photos[0]} userName={item.name} type={'footballCourt'} />
+                    )
+                  } else {
+                    return (
+                      <></>
                     )
                   }
                 }

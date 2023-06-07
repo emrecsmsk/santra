@@ -19,17 +19,15 @@ interface PostProps {
     postPhoto: string,
     description: string,
     likes: string[]
-    isSaved: boolean,
     comments: CommentModel[]
 }
 
-const Post: FC<PostProps> = ({ postId, userId, postPhoto, description, likes, isSaved, comments }) => {
+const Post: FC<PostProps> = ({ postId, userId, postPhoto, description, likes, comments }) => {
 
     const { profileModel } = useSelector((state: ApplicationState) => state.profileReducer)
     const [stateIsLiked, setStateIsLiked] = useState(false)
     const [stateLikeCount, setStateLikeCount] = useState(likes.length)
     const [stateCommentCount, setStateCommentCount] = useState(comments.length)
-    const [stateIsSaved, setStateIsSaved] = useState(isSaved)
     const [profileModelState, setProfileModelState] = useState<ProfileModel>()
     const navigation = useNavigation<any>()
 
@@ -52,10 +50,6 @@ const Post: FC<PostProps> = ({ postId, userId, postPhoto, description, likes, is
         querySnapshot.forEach((doc) => {
             setProfileModelState(doc.data() as ProfileModel)
         })
-    }
-
-    const onTapSave = () => {
-        setStateIsSaved(!stateIsSaved)
     }
 
     const onPressLike = async () => {
@@ -83,7 +77,7 @@ const Post: FC<PostProps> = ({ postId, userId, postPhoto, description, likes, is
                 <Card onPress={(_) => console.log('posta tıklandı')} elevation={1}>
                     <View style={styles.view}>
                         <View style={styles.viewRow}>
-                            <TouchableOpacity onPress={() => navigation.navigate(NavigationConstants.profile, {id: userId})}>
+                            <TouchableOpacity onPress={() => navigation.navigate(NavigationConstants.profile, { id: userId })}>
                                 <Avatar.Image size={45} source={{ uri: profileModelState?.profilePhoto }} style={styles.avatar} />
                             </TouchableOpacity>
                             <View style={styles.viewColumn}>
@@ -100,13 +94,10 @@ const Post: FC<PostProps> = ({ postId, userId, postPhoto, description, likes, is
                                         <Ionicons name={stateIsLiked ? "heart" : "heart-outline"} size={24} color={stateIsLiked ? colors.red : colors.grey} />
                                     </TouchableOpacity>
                                     <Text style={stateIsLiked ? styles.countRed : styles.countGrey}>{stateLikeCount}</Text>
-                                    <TouchableOpacity style={styles.commentButton} onPress={() => (navigation.push(NavigationConstants.comments, {postId}))}>
+                                    <TouchableOpacity style={styles.commentButton} onPress={() => (navigation.push(NavigationConstants.comments, { postId }))}>
                                         <Ionicons name={"chatbox-outline"} size={24} color={colors.grey} />
                                     </TouchableOpacity>
                                     <Text style={styles.countGrey}>{stateCommentCount}</Text>
-                                    <TouchableOpacity style={styles.saveButton} onPress={() => (onTapSave())}>
-                                        <Ionicons name={stateIsSaved ? "bookmark" : "bookmark-outline"} size={24} color={stateIsSaved ? colors.black : colors.grey} />
-                                    </TouchableOpacity>
                                 </View>
                             </View>
                         </View>

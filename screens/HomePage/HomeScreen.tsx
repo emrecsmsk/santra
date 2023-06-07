@@ -19,8 +19,26 @@ const HomeScreen: FC = () => {
   const [footballCourts, setFootballCourts] = useState<FootballCourtModel[]>([]);
 
   useEffect(() => {
+    
+
+
     fetchFootballCourts();
   }, []);
+
+  const deneme = async () => {
+    try {
+      const q = query(collection(db, "footballCourts"));
+      const querySnapshot = await getDocs(q);
+      const courts: FootballCourtModel[] = [];
+      querySnapshot.forEach((doc) => {
+        const court = { id: doc.id, ...doc.data() } as FootballCourtModel;
+        courts.push(court);
+      });
+      setFootballCourts(courts);
+    } catch (error) {
+      console.log("Hata:", error);
+    }
+  };
 
   const fetchFootballCourts = async () => {
     try {

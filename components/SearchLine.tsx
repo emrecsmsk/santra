@@ -21,11 +21,9 @@ const SearchLine: FC<SearchLine> = ({ id, photo, userName, name, position, shirt
 
     const onPress = () => {
         if (type === 'user') {
-            const isSearched = true
-            navigation.push(NavigationConstants.profile, { id, isSearched })
+            navigation.push(NavigationConstants.profile, { id })
         }
         if (type === 'footballCourt') {
-            const isSearched = true
             navigation.push(NavigationConstants.footballCourt, { id })
         }
     }

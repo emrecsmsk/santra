@@ -101,7 +101,7 @@ const TimelineScreen: FC = () => {
               refreshControl={
                 <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
               }
-              renderItem={({ item }) => <Post postId={item.postId} userId={item.userId} postPhoto={item.postPhoto} description={item.description} likes={item.likes} isSaved={false} comments={item.comments} />}
+              renderItem={({ item }) => <Post postId={item.postId} userId={item.userId} postPhoto={item.postPhoto} description={item.description} likes={item.likes} comments={item.comments} />}
               onEndReached={fetchMorePosts}
             />
             <FAB
