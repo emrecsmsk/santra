@@ -13,7 +13,8 @@ export interface ProfileModel {
     teams: string[],
     favoriteFootballCourts: string[]
     profilePhoto: string,
-    headerPhoto: string
+    headerPhoto: string,
+    nextMatches: NextMatchesModel[]
 }
 
 

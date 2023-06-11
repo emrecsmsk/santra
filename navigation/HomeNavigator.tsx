@@ -19,11 +19,6 @@ const HomeNavigator: FC = () => {
             <Stack.Screen name={NavigationConstants.home} component={HomeScreen} options={
                 {
                     title: "Santra",
-                    headerRight: () => (
-                        <TouchableOpacity onPress={() => console.log()}>
-                            <Ionicons style={{ paddingRight: 15 }} name="notifications-outline" size={24} color="black" />
-                        </TouchableOpacity>
-                    ),
                 }} />
             <Stack.Screen name={NavigationConstants.favoriteFootballCourts} component={FavoriteFootballCourts} options={
                 {

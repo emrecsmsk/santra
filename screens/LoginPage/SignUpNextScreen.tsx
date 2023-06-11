@@ -168,6 +168,7 @@ const SignUpNextScreen: FC = () => {
                     following: [],
                     teams: [],
                     favoriteFootballCourts: [],
+                    nextMatches: [],
                     profilePhoto: 'https://firebasestorage.googleapis.com/v0/b/santra-d7297.appspot.com/o/defaultPP.jpg?alt=media&token=266aec21-c3fd-4819-96a2-9e4771a54cf9',
                     headerPhoto: 'https://firebasestorage.googleapis.com/v0/b/santra-d7297.appspot.com/o/defaultHeader.jpg?alt=media&token=cf3e4765-d1f9-4691-bbc4-e13866e86b2b'
                 }

@@ -11,6 +11,7 @@ export interface SignUpModel {
     following?: string[],
     teams?: string[],
     favoriteFootballCourts: string[],
+    nextMatches: NextMatchesModel[],
     profilePhoto: string,
     headerPhoto: string
 }

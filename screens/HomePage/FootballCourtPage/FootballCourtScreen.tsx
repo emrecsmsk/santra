@@ -67,17 +67,53 @@ const FootballCourtScreen: FC = () => {
             data.push(formattedDate);
             today.setDate(today.getDate() + 1);
         }
-
         setDate(data)
+    }
+
+    const formatDate = (tarih: string): string => {
+        const pieces = tarih.split('.');
+        const day = pieces[0];
+        const month = pieces[1];
+
+        const months = [
+            'Ocak',
+            'Şubat',
+            'Mart',
+            'Nisan',
+            'Mayıs',
+            'Haziran',
+            'Temmuz',
+            'Ağustos',
+            'Eylül',
+            'Ekim',
+            'Kasım',
+            'Aralık'
+        ];
+
+        const formattedDate = `${day} ${months[Number(month) - 1]}`;
+
+        return formattedDate;
     }
 
     const makeReservation = async (selectedDate: string, selectedHour: string) => {
         footballCourt!.reservation[selectedDate][selectedHour] = profileModel!.id
 
-        const docRef = doc(db, 'footballCourts', id);
+        const formattedDate: string = formatDate(selectedDate)
+
+        const newNextMatches: FieldValue = arrayUnion({
+            footballCourt: footballCourt?.name,
+            date: formattedDate + ' ' + selectedHour
+        })
+        const docData = {
+            nextMatches: newNextMatches
+        }
+        await updateDoc(doc(db, "users", profileModel!.id), docData)
+        dispatch(ProfileReducer.getProfile())
+
+        const docRef = doc(db, 'footballCourts', id)
         await updateDoc(docRef, {
             reservation: footballCourt!.reservation
-        });
+        })
         hideDialog()
     }
 

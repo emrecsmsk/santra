@@ -1,5 +1,5 @@
-import React, { FC, useEffect, useState } from 'react';
-import { View, Text, StyleSheet, FlatList, Dimensions, Image, TouchableOpacity, Button } from 'react-native';
+import React, { FC, useEffect, useRef, useState } from 'react';
+import { View, Text, StyleSheet, FlatList, Dimensions, Image, TouchableOpacity } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Ionicons } from '@expo/vector-icons';
 import { FootballCourtModel } from '../../models/FootballCourtModel';
@@ -7,38 +7,21 @@ import { collection, getDocs, query } from 'firebase/firestore'
 import { db } from '../../firebase';
 import { useNavigation } from '@react-navigation/native';
 import NavigationConstants from '../../navigation/NavigationConstants';
+import { useSelector } from 'react-redux';
+import { ApplicationState } from '../../redux/ReduxStore';
+import LottieView from 'lottie-react-native'
+import { ScrollView } from 'react-native-gesture-handler';
 
 const HomeScreen: FC = () => {
-  const DATA = [
-    { id: '1', team: 'Galatasaray', dateTime: "28 Ocak", imageUrl: "https://upload.wikimedia.org/wikipedia/commons/f/f6/Galatasaray_Sports_Club_Logo.png" },
-    { id: '2', team: 'Fenerbahçe', dateTime: "29 Ocak", imageUrl: "https://upload.wikimedia.org/wikipedia/tr/8/86/Fenerbahçe_SK.png" },
-    { id: '3', team: 'Beşiktaş', dateTime: "30 Ocak", imageUrl: "https://upload.wikimedia.org/wikipedia/commons/0/08/Beşiktaş_Logo_Beşiktaş_Amblem_Beşiktaş_Arma.png" },
-  ];
 
+  const { profileModel } = useSelector((state: ApplicationState) => state.profileReducer)
+  const animation = useRef(null)
   const navigation = useNavigation<any>()
   const [footballCourts, setFootballCourts] = useState<FootballCourtModel[]>([]);
 
   useEffect(() => {
-    
-
-
     fetchFootballCourts();
   }, []);
-
-  const deneme = async () => {
-    try {
-      const q = query(collection(db, "footballCourts"));
-      const querySnapshot = await getDocs(q);
-      const courts: FootballCourtModel[] = [];
-      querySnapshot.forEach((doc) => {
-        const court = { id: doc.id, ...doc.data() } as FootballCourtModel;
-        courts.push(court);
-      });
-      setFootballCourts(courts);
-    } catch (error) {
-      console.log("Hata:", error);
-    }
-  };
 
   const fetchFootballCourts = async () => {
     try {
@@ -53,41 +36,49 @@ const HomeScreen: FC = () => {
     } catch (error) {
       console.log("Hata:", error);
     }
-  };
+  }
 
   return (
-    <View style={styles.motherView}>
-
+    <ScrollView style={styles.view}>
       <View style={styles.firstView}>
-        <FlatList
-          data={DATA}
-          keyExtractor={(item) => item.id}
-          horizontal
-          showsHorizontalScrollIndicator={false}
-          renderItem={({ item }) => (
-            <LinearGradient
-              colors={["#fd3854", "#f842a3"]}
-              style={styles.card}
-            >
-              <View style={styles.view1}>
-                <Text style={styles.cardText}>Sonraki Maç</Text>
-                <Text style={styles.cardText2}>
-                  <Text style={styles.largeText}>{item.dateTime.split(' ')[0]}</Text> {item.dateTime.split(' ')[1]}
-                </Text>
-                <Text style={styles.cardText}>Takım</Text>
-                <Text style={styles.cardText2}>{item.team}</Text>
+        {
+          profileModel?.nextMatches[0] === undefined ?
+            <View style={{ alignItems: 'center', }}>
+              <LottieView
+                autoPlay
+                ref={animation}
+                source={require('../../assets/noNextMatch.json')}
+                style={{ height: 200, position: 'absolute', marginTop: -10 }}
+              />
+              <View style={{ position: 'absolute', marginTop: 130, alignItems: 'center' }}>
+                <Text style={{ fontWeight: '500' }}>Gelecek tarihte herhangi </Text>
+                <Text style={{ fontWeight: '500' }}>bir maçınız bulunmamakta!</Text>
               </View>
-              <View style={styles.view2}>
-                <Image
-                  style={{ width: 50, height: 50, borderRadius: 25 }}
-                  source={{ uri: item.imageUrl }}
-                />
-              </View>
-            </LinearGradient>
-          )}
-        />
+            </View>
+            :
+            <FlatList
+              data={profileModel?.nextMatches}
+              keyExtractor={(item) => item.date}
+              horizontal
+              showsHorizontalScrollIndicator={false}
+              renderItem={({ item }) => (
+                <LinearGradient
+                  colors={["#fd3854", "#f842a3"]}
+                  style={styles.card}>
+                  <View style={styles.view}>
+                    <Text style={styles.cardText}>Sonraki Maç</Text>
+                    <Text style={styles.cardText2}>
+                      <Text style={styles.largeText}>{item.date.split(' ')[0]} </Text>
+                      {item.date.split(' ')[1]} {item.date.split(' ')[2]}
+                    </Text>
+                    <Text style={styles.cardText}>Halısaha</Text>
+                    <Text style={styles.cardText2}>{item.footballCourt}</Text>
+                  </View>
+                </LinearGradient>
+              )}
+            />
+        }
       </View>
-
       <View style={styles.secondView}>
         <Text style={styles.title}>Sponsorlu Halısahalar</Text>
         {
@@ -97,21 +88,21 @@ const HomeScreen: FC = () => {
             horizontal
             showsHorizontalScrollIndicator={false}
             renderItem={({ item }) => (
-              <View >
+              <TouchableOpacity onPress={
+                () =>
+                  navigation.push(NavigationConstants.footballCourt, { id: item.id })}>
                 <Image
                   style={styles.card2}
                   source={{ uri: item.photos[0] }}
                 />
                 <Text style={styles.footballCourtName}>{item.name}</Text>
-              </View>
+              </TouchableOpacity>
             )}
             keyExtractor={(item) => item.id}
           />
         }
       </View>
-
       <View style={styles.thirdView}>
-
         <TouchableOpacity onPress={() => console.log('Takım')}>
           <View >
             <LinearGradient
@@ -122,7 +113,6 @@ const HomeScreen: FC = () => {
             </LinearGradient>
           </View>
         </TouchableOpacity>
-
         <TouchableOpacity onPress={() => navigation.push(NavigationConstants.favoriteFootballCourts)}>
           <View >
             <LinearGradient
@@ -133,53 +123,34 @@ const HomeScreen: FC = () => {
             </LinearGradient>
           </View>
         </TouchableOpacity>
-
-        <TouchableOpacity onPress={() => console.log('Maçlar')}>
-          <View >
-            <LinearGradient
-              colors={["#f78039", "#ffbe2c"]}
-              style={styles.lineGradient}>
-              <Ionicons name="football" size={32} color="white" />
-              <Text style={styles.bottomText}>Maçlar</Text>
-            </LinearGradient>
-          </View>
-        </TouchableOpacity>
-
       </View>
-    </View>
+    </ScrollView>
   );
 };
 
 const styles = StyleSheet.create({
-  motherView: {
+  view: {
     flex: 1,
   },
   firstView: {
-    flex: 1,
+    height: 170,
+    marginBottom: 30
   },
   secondView: {
-    flex: 1,
-  },
-  largeText: {
-    fontSize: 32,
+    height: 220
   },
   thirdView: {
-    flex: 1,
     flexDirection: "row",
-    justifyContent: 'space-between',
+    justifyContent: 'space-around',
     marginLeft: 30,
     marginRight: 30,
     marginTop: 30
   },
-  view1: {
-    flex: 2
-  },
-  view2: {
-    flex: 1,
-    marginBottom: 35
+  largeText: {
+    fontSize: 32,
   },
   lineGradient: {
-    width: 100,
+    width: 125,
     height: 100,
     borderRadius: 10,
     justifyContent: "center",
@@ -215,7 +186,7 @@ const styles = StyleSheet.create({
     marginHorizontal: 10,
     alignItems: 'center',
     marginLeft: 25,
-    marginTop: 20
+    marginTop: 10
   },
   cardText: {
     fontSize: 18,
@@ -231,7 +202,7 @@ const styles = StyleSheet.create({
   },
   title: {
     fontSize: 16,
-    marginLeft: 25
+    marginLeft: 25,
   },
   firstText: {
     color: "white",

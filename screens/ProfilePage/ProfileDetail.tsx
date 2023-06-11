@@ -1,11 +1,9 @@
-import { View, Text, StyleSheet, Image } from 'react-native'
+import { View, Text, StyleSheet, Image, Dimensions } from 'react-native'
 import React, { FC, useEffect, useState } from 'react'
-import { Button, Card, Divider } from 'react-native-paper'
+import { Card, Divider } from 'react-native-paper'
 import colors from '../../utilies/colors'
-import MatchLine from '../../components/MatchLine'
-import NavigationConstants from '../../navigation/NavigationConstants'
 import { useNavigation } from '@react-navigation/native'
-import { collection, getDocs, limit, query, where } from 'firebase/firestore'
+import { collection, getDocs, query, where } from 'firebase/firestore'
 import { db } from '../../firebase'
 import { TeamModel } from '../../models/TeamModel'
 
@@ -21,7 +19,6 @@ interface ProfileDetailProps {
 const ProfileDetail: FC<ProfileDetailProps> = ({ teams, birth, height, preferredFoot, position, shirtNumber }) => {
 
     const [age, setAge] = useState('')
-    const navigation = useNavigation<any>()
     var teamsTemp: TeamModel[]
     const [teamsState, setTeamsState] = useState<TeamModel[]>()
 
@@ -62,11 +59,11 @@ const ProfileDetail: FC<ProfileDetailProps> = ({ teams, birth, height, preferred
                     <Divider style={{ width: 30, height: 1 }} />
                 </View>
                 {
-                    teamsState?.map((item, index) => 
-                    <View key={index} style={styles.viewRow}>
-                        <Image style={styles.teamImage} resizeMode='contain' source={{ uri: item.teamPhoto }} />
-                        <Text style={styles.teamText}>{item.name}</Text>
-                    </View>)
+                    teamsState?.map((item, index) =>
+                        <View key={index} style={styles.viewRow}>
+                            <Image style={styles.teamImage} resizeMode='contain' source={{ uri: item.teamPhoto }} />
+                            <Text style={styles.teamText}>{item.name}</Text>
+                        </View>)
                 }
             </Card>
             <Card style={styles.cardView}>
@@ -99,20 +96,23 @@ const ProfileDetail: FC<ProfileDetailProps> = ({ teams, birth, height, preferred
                     </View>
                 </View>
             </Card>
-            <Card style={[{ paddingHorizontal: 0 }, styles.cardView]}>
-                <View style={styles.titleView}>
-                    <Text style={styles.titleText}>Maç geçmişi</Text>
-                    <Divider style={{ width: 30, height: 1 }} />
-                </View>
-                <MatchLine firstTeam={'Galatasaray'} secondTeam={'Fenerbahçe'} firstTeamPhoto={'https://upload.wikimedia.org/wikipedia/commons/thumb/f/f6/Galatasaray_Sports_Club_Logo.png/961px-Galatasaray_Sports_Club_Logo.png'} secondTeamPhoto={'https://upload.wikimedia.org/wikipedia/tr/8/86/Fenerbahçe_SK.png'} time={'19.00'} date={'04.06.2023'} isMatchFinished={true} score={''} />
-                <MatchLine firstTeam={'Galatasaray'} secondTeam={'Fenerbahçe'} firstTeamPhoto={'https://upload.wikimedia.org/wikipedia/commons/thumb/f/f6/Galatasaray_Sports_Club_Logo.png/961px-Galatasaray_Sports_Club_Logo.png'} secondTeamPhoto={'https://upload.wikimedia.org/wikipedia/tr/8/86/Fenerbahçe_SK.png'} time={'19.00'} date={'04.06.2023'} isMatchFinished={false} score={'2-1'} />
-                <MatchLine firstTeam={'Galatasaray'} secondTeam={'Fenerbahçe'} firstTeamPhoto={'https://upload.wikimedia.org/wikipedia/commons/thumb/f/f6/Galatasaray_Sports_Club_Logo.png/961px-Galatasaray_Sports_Club_Logo.png'} secondTeamPhoto={'https://upload.wikimedia.org/wikipedia/tr/8/86/Fenerbahçe_SK.png'} time={'19.00'} date={'04.06.2023'} isMatchFinished={false} score={'2-1'} />
-                <MatchLine firstTeam={'Galatasaray'} secondTeam={'Fenerbahçe'} firstTeamPhoto={'https://upload.wikimedia.org/wikipedia/commons/thumb/f/f6/Galatasaray_Sports_Club_Logo.png/961px-Galatasaray_Sports_Club_Logo.png'} secondTeamPhoto={'https://upload.wikimedia.org/wikipedia/tr/8/86/Fenerbahçe_SK.png'} time={'19.00'} date={'04.06.2023'} isMatchFinished={false} score={'2-1'} />
-                <MatchLine firstTeam={'Galatasaray'} secondTeam={'Fenerbahçe'} firstTeamPhoto={'https://upload.wikimedia.org/wikipedia/commons/thumb/f/f6/Galatasaray_Sports_Club_Logo.png/961px-Galatasaray_Sports_Club_Logo.png'} secondTeamPhoto={'https://upload.wikimedia.org/wikipedia/tr/8/86/Fenerbahçe_SK.png'} time={'19.00'} date={'04.06.2023'} isMatchFinished={false} score={'2-1'} />
-                <MatchLine firstTeam={'Galatasaray'} secondTeam={'Fenerbahçe'} firstTeamPhoto={'https://upload.wikimedia.org/wikipedia/commons/thumb/f/f6/Galatasaray_Sports_Club_Logo.png/961px-Galatasaray_Sports_Club_Logo.png'} secondTeamPhoto={'https://upload.wikimedia.org/wikipedia/tr/8/86/Fenerbahçe_SK.png'} time={'19.00'} date={'04.06.2023'} isMatchFinished={false} score={'2-1'} />
-                <MatchLine firstTeam={'Galatasaray'} secondTeam={'Fenerbahçe'} firstTeamPhoto={'https://upload.wikimedia.org/wikipedia/commons/thumb/f/f6/Galatasaray_Sports_Club_Logo.png/961px-Galatasaray_Sports_Club_Logo.png'} secondTeamPhoto={'https://upload.wikimedia.org/wikipedia/tr/8/86/Fenerbahçe_SK.png'} time={'19.00'} date={'04.06.2023'} isMatchFinished={false} score={'2-1'} />
-                <MatchLine firstTeam={'Galatasaray'} secondTeam={'Fenerbahçe'} firstTeamPhoto={'https://upload.wikimedia.org/wikipedia/commons/thumb/f/f6/Galatasaray_Sports_Club_Logo.png/961px-Galatasaray_Sports_Club_Logo.png'} secondTeamPhoto={'https://upload.wikimedia.org/wikipedia/tr/8/86/Fenerbahçe_SK.png'} time={'19.00'} date={'04.06.2023'} isMatchFinished={false} score={'2-1'} />
-                <MatchLine firstTeam={'Galatasaray'} secondTeam={'Fenerbahçe'} firstTeamPhoto={'https://upload.wikimedia.org/wikipedia/commons/thumb/f/f6/Galatasaray_Sports_Club_Logo.png/961px-Galatasaray_Sports_Club_Logo.png'} secondTeamPhoto={'https://upload.wikimedia.org/wikipedia/tr/8/86/Fenerbahçe_SK.png'} time={'19.00'} date={'04.06.2023'} isMatchFinished={false} score={'2-1'} />
+            <Card style={styles.positionCardView}>
+
+                <Image
+                    style={{
+                        width: Dimensions.get('window').width - 20,
+                        height: (Dimensions.get('window').width - 20) * 421 / 612,
+                    }}
+                    source={
+                        position === "GK" ?
+                            require('../../assets/GK.png')
+                            : position === "DF" ?
+                                require('../../assets/DF.png')
+                                : position === "OS" ?
+                                    require('../../assets/OS.png')
+                                    : require('../../assets/FW.png')
+                    }
+                />
             </Card>
         </View >
 
@@ -132,6 +132,12 @@ const styles = StyleSheet.create({
         marginBottom: 5,
         marginHorizontal: 10,
         padding: 10
+    },
+    positionCardView: {
+        backgroundColor: colors.white,
+        marginTop: 10,
+        marginBottom: 5,
+        marginHorizontal: 10,
     },
     divider: {
         margin: 10,

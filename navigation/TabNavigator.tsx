@@ -18,37 +18,9 @@ import ProfileReducer from "../redux/reducers/ProfileReducer";
 
 
 const TabNavigator: FC = () => {
-
-    const dispatch = useDispatch<any>()
+    
     const { isLoggedIn } = useSelector((state: ApplicationState) => state.loginReducer)
     const Tab = createBottomTabNavigator();
-    var email = ""
-    var password = ""
-
-    useEffect(() => {
-        login()
-    }, [])
-
-    const login = async () => {
-        await getLoginItem()
-        signInWithEmailAndPassword(auth, email, password)
-            .then((user) => {
-                // Signed in 
-                dispatch(LoginReducer.setIsLoggedIn(true))
-                dispatch(ProfileReducer.getProfile())
-                // ...
-            })
-            .catch((error) => {
-                const errorCode = error.code;
-                const errorMessage = error.message;
-                console.log(errorCode)
-                console.log(errorMessage)
-            });
-    }
-    const getLoginItem = async () => {
-        email = await AsyncStorage.getItem('email') ?? ""
-        password = await AsyncStorage.getItem('password') ?? ""
-    }
 
     return (
         <>
