@@ -103,7 +103,7 @@ const HomeScreen: FC = () => {
         }
       </View>
       <View style={styles.thirdView}>
-        <TouchableOpacity onPress={() => console.log('Takım')}>
+      <TouchableOpacity onPress={()=> navigation.navigate(NavigationConstants.teamScreen)}>
           <View >
             <LinearGradient
               colors={["#5d4fed", "#46cceb"]}

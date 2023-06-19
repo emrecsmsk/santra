@@ -26,6 +26,9 @@ const SearchLine: FC<SearchLine> = ({ id, photo, userName, name, position, shirt
         if (type === 'footballCourt') {
             navigation.push(NavigationConstants.footballCourt, { id })
         }
+        if (type === 'teams') {
+            navigation.push(NavigationConstants.teamDetailScreen, { id })
+        }
     }
 
     return (

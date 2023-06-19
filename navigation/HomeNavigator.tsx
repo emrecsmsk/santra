@@ -7,6 +7,8 @@ import { TouchableOpacity } from "react-native";
 import FavoriteFootballCourts from "../screens/HomePage/FavoriteFootballCourtsPage/FavoriteFootballCourts";
 import FootballCourtScreen from "../screens/HomePage/FootballCourtPage/FootballCourtScreen";
 import MessagingScreen from "../screens/MessagesPage/MessagingScreen";
+import TeamScreen from "../screens/HomePage/TeamPage/TeamScreen";
+import TeamDetailScreen from "../screens/HomePage/TeamPage/TeamDetailScreen";
 
 
 
@@ -36,6 +38,22 @@ const HomeNavigator: FC = () => {
                 name={NavigationConstants.messaging}
                 component={MessagingScreen}
                 options={{
+                    headerBackTitle: " "
+                }}
+            />
+            <Stack.Screen
+                name={NavigationConstants.teamScreen}
+                component={TeamScreen}
+                options={{
+                    title: "Takım",
+                    headerBackTitle: " "
+                }}
+            />
+            <Stack.Screen
+                name={NavigationConstants.teamDetailScreen}
+                component={TeamDetailScreen}
+                options={{
+                    title: "Takım Ayrıntıları",
                     headerBackTitle: " "
                 }}
             />

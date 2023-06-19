@@ -179,7 +179,7 @@ const SearchScreen: FC = () => {
           <Tabs.FlatList
             data={searchedTeams}
             keyExtractor={item => item.id}
-            renderItem={({ item }) => <SearchLine id={item.id} photo={item.teamPhoto} userName={item.name} type={'team'} />
+            renderItem={({ item }) => <SearchLine id={item.id} photo={item.teamPhoto} userName={item.name} type={'teams'} />
             }
           />
         </Tabs.Tab>

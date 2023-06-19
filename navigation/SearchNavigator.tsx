@@ -8,6 +8,7 @@ import ProfileEdit from "../screens/ProfilePage/ProfileEditPage/ProfileEdit";
 import CommentsScreen from "../screens/TimelinePage/CommentPage/CommentsScreen";
 import FootballCourtScreen from "../screens/HomePage/FootballCourtPage/FootballCourtScreen";
 import MessagingScreen from "../screens/MessagesPage/MessagingScreen";
+import TeamDetailScreen from "../screens/HomePage/TeamPage/TeamDetailScreen";
 
 
 
@@ -65,6 +66,13 @@ const SearchNavigator: FC = () => {
                 component={MessagingScreen}
                 options={{
                     headerBackTitle: " "
+                }}
+            />
+            <Stack.Screen
+                name={NavigationConstants.teamDetailScreen}
+                component={TeamDetailScreen}
+                options={{
+                    headerBackTitle: " ",
                 }}
             />
         </Stack.Navigator >
